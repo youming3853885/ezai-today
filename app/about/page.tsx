@@ -30,10 +30,10 @@ export default function AboutPage() {
             <CardContent className="p-6">
               <div className="flex justify-center mb-6">
                 <div className="flex gap-4">
-                  <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-[#E5E5E0]">
+                  <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-[#E5E5E0]">
                     <Image src="/eddie.png" alt="Eddie Chen" fill className="object-cover" />
                   </div>
-                  <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-[#E5E5E0]">
+                  <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-[#E5E5E0]">
                     <Image src="/cute_man.png" alt="卡通角色" fill className="object-cover" />
                   </div>
                 </div>
