@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run:*)",
+      "Bash(taskkill /F /IM node.exe 2>/dev/null; sleep 1; npm run dev)",
+      "Bash(pkill -f \"next dev\" 2>/dev/null; rm -f C:/AI-Cursor/ezai_web/.next/dev/lock; sleep 1; npm run dev)",
+      "Bash(find /c/Users/DCT -maxdepth 4 -name \"*cute_man*\" -o -name \"*eddie*\" -o -name \"*background*\" -o -name \"*top_bar*\" 2>/dev/null | head -20)",
+      "Bash(find /c/Users/DCT -maxdepth 5 -iname \"*cute*man*\" -o -iname \"*eddie*chen*\" 2>/dev/null | head -20)",
+      "Bash(ls -la /c/Users/DCT/Desktop/Arduino專案/web/*.png | head -10)",
+      "Bash(cp \"/c/Users/DCT/Desktop/Arduino專案/web/卡通娃娃.png\" C:/AI-Cursor/ezai_web/public/cute_man.png && cp \"/c/Users/DCT/Desktop/Arduino專案/web/人物照片.png\" C:/AI-Cursor/ezai_web/public/eddie.png && cp \"/c/Users/DCT/Desktop/Arduino專案/web/背景圖.png\" C:/AI-Cursor/ezai_web/public/background.png)",
+      "WebSearch"
+    ]
+  }
+}
