@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 
 export const metadata = {
   title: '課程 | Ezai.today',
@@ -66,22 +68,22 @@ export default function CoursesPage() {
           <div className="space-y-3">
             {courses.map((course) => (
               <Link key={course.id} href={`/courses/${course.id}`} className="block group">
-                <article className="card-premium p-4 flex gap-4">
-                  <div className="relative w-24 h-20 rounded-lg overflow-hidden flex-shrink-0 img-hover-zoom">
+                <Card className="p-4 flex gap-4 hover:border-[#2D5A27]/30 transition-colors">
+                  <div className="relative w-24 h-20 rounded-lg overflow-hidden flex-shrink-0">
                     <Image src={course.image} alt={course.title} fill className="object-cover" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between gap-2 mb-1">
-                      <h2 className="text-sm font-semibold text-[#1a1a1a] truncate">{course.title}</h2>
-                      <span className="text-xs text-[#FF8F00] font-medium">即將上線</span>
+                      <h3 className="text-sm font-semibold text-[#1a1a1a] truncate">{course.title}</h3>
+                      <Badge variant="secondary" className="text-[#FF8F00] bg-[#FF8F00]/10">即將上線</Badge>
                     </div>
                     <p className="text-xs text-[#6b7280] line-clamp-1 mb-2">{course.description}</p>
                     <div className="flex items-center gap-2 text-[10px] text-[#9CA3AF]">
-                      <span className="px-1.5 py-0.5 rounded bg-[#F5F4F1]">{course.level}</span>
+                      <Badge variant="outline">{course.level}</Badge>
                       <span>{course.duration}</span>
                     </div>
                   </div>
-                </article>
+                </Card>
               </Link>
             ))}
           </div>
@@ -92,10 +94,12 @@ export default function CoursesPage() {
         <div className="max-w-2xl mx-auto">
           <div className="grid grid-cols-3 gap-2">
             {features.map((feature) => (
-              <div key={feature.title} className="text-center p-4 rounded-lg bg-[#F5F4F1]">
-                <h3 className="text-xs font-semibold text-[#1a1a1a] mb-0.5">{feature.title}</h3>
-                <p className="text-[10px] text-[#9CA3AF]">{feature.description}</p>
-              </div>
+              <Card key={feature.title}>
+                <CardContent className="p-4 text-center">
+                  <h3 className="text-xs font-semibold text-[#1a1a1a] mb-0.5">{feature.title}</h3>
+                  <p className="text-[10px] text-[#9CA3AF]">{feature.description}</p>
+                </CardContent>
+              </Card>
             ))}
           </div>
         </div>

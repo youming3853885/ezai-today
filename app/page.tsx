@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 export default function Home() {
   return (
@@ -37,28 +39,34 @@ export default function Home() {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-12">
-            <Link href="/courses" className="btn-primary text-sm px-6 py-3">
-              探索課程
-            </Link>
-            <Link href="/about" className="btn-secondary text-sm px-6 py-3">
-              了解更多
-            </Link>
+            <Button>
+              <Link href="/courses">探索課程</Link>
+            </Button>
+            <Button variant="outline">
+              <Link href="/about">了解更多</Link>
+            </Button>
           </div>
 
           {/* Stats */}
           <div className="grid grid-cols-3 gap-4 max-w-sm mx-auto">
-            <div className="text-center p-4 rounded-xl bg-white/70 border border-[#E5E5E0]">
-              <div className="text-xl font-bold text-[#1a1a1a]">200+</div>
-              <div className="text-[10px] text-[#6b7280]">演講場次</div>
-            </div>
-            <div className="text-center p-4 rounded-xl bg-white/70 border border-[#E5E5E0]">
-              <div className="text-xl font-bold text-[#1a1a1a]">10+</div>
-              <div className="text-[10px] text-[#6b7280]">年經驗</div>
-            </div>
-            <div className="text-center p-4 rounded-xl bg-white/70 border border-[#E5E5E0]">
-              <div className="text-xl font-bold text-[#1a1a1a]">1000+</div>
-              <div className="text-[10px] text-[#6b7280]">學生人數</div>
-            </div>
+            <Card>
+              <CardContent className="p-4 text-center">
+                <div className="text-xl font-bold text-[#1a1a1a]">200+</div>
+                <div className="text-[10px] text-[#6b7280]">演講場次</div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-4 text-center">
+                <div className="text-xl font-bold text-[#1a1a1a]">10+</div>
+                <div className="text-[10px] text-[#6b7280]">年經驗</div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-4 text-center">
+                <div className="text-xl font-bold text-[#1a1a1a]">1000+</div>
+                <div className="text-[10px] text-[#6b7280]">學生人數</div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
@@ -76,13 +84,15 @@ export default function Home() {
               { title: '實作導向', desc: '每堂課都有實際專案' },
               { title: '社群支持', desc: '專屬 LINE 群組答疑' },
             ].map((item) => (
-              <div key={item.title} className="card-premium p-6 text-center">
-                <div className="w-10 h-10 mx-auto mb-4 rounded-lg bg-[#2D5A27]/10 flex items-center justify-center">
-                  <div className="w-2 h-2 rounded-full bg-[#2D5A27]" />
-                </div>
-                <h3 className="text-sm font-semibold text-[#1a1a1a] mb-2">{item.title}</h3>
-                <p className="text-xs text-[#6b7280]">{item.desc}</p>
-              </div>
+              <Card key={item.title}>
+                <CardContent className="p-6 text-center">
+                  <div className="w-10 h-10 mx-auto mb-4 rounded-lg bg-[#2D5A27]/10 flex items-center justify-center">
+                    <div className="w-2 h-2 rounded-full bg-[#2D5A27]" />
+                  </div>
+                  <h3 className="text-sm font-semibold text-[#1a1a1a] mb-2">{item.title}</h3>
+                  <p className="text-xs text-[#6b7280]">{item.desc}</p>
+                </CardContent>
+              </Card>
             ))}
           </div>
         </div>
@@ -97,9 +107,9 @@ export default function Home() {
           <p className="text-sm text-[#6b7280] mb-6">
             讓我們一起探索科技的無限可能
           </p>
-          <Link href="/courses" className="btn-primary text-sm px-6 py-3 inline-block">
-            立即開始
-          </Link>
+          <Button>
+            <Link href="/courses">立即開始</Link>
+          </Button>
         </div>
       </section>
     </>

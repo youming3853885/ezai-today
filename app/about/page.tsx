@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { Card, CardContent } from '@/components/ui/card';
 
 export const metadata = {
   title: '關於 | Ezai.today',
@@ -25,34 +26,36 @@ export default function AboutPage() {
 
       <section className="px-6 pb-12">
         <div className="max-w-2xl mx-auto">
-          <div className="card-premium p-6">
-            <div className="flex justify-center mb-6">
-              <div className="flex gap-4">
-                <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-[#E5E5E0]">
-                  <Image src="/eddie.png" alt="Eddie Chen" fill className="object-cover" />
-                </div>
-                <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-[#E5E5E0]">
-                  <Image src="/cute_man.png" alt="卡通角色" fill className="object-cover" />
-                </div>
-              </div>
-            </div>
-
-            <div className="text-center">
-              <p className="text-sm text-[#6b7280] leading-relaxed mb-6">
-                熱愛科技教育，透過整合 AI 應用，物聯網與智慧機器人課程，
-                激發學生探索未來的熱情，在實踐中養成具備數位韌性的創新思考者。
-              </p>
-
-              <div className="grid grid-cols-3 gap-2">
-                {credentials.map((cred) => (
-                  <div key={cred.label} className="p-3 rounded-lg bg-[#F5F4F1]">
-                    <div className="text-lg font-bold text-[#1a1a1a]">{cred.value}</div>
-                    <div className="text-[10px] text-[#2D5A27]">{cred.label}</div>
+          <Card>
+            <CardContent className="p-6">
+              <div className="flex justify-center mb-6">
+                <div className="flex gap-4">
+                  <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-[#E5E5E0]">
+                    <Image src="/eddie.png" alt="Eddie Chen" fill className="object-cover" />
                   </div>
-                ))}
+                  <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-[#E5E5E0]">
+                    <Image src="/cute_man.png" alt="卡通角色" fill className="object-cover" />
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
+
+              <div className="text-center">
+                <p className="text-sm text-[#6b7280] leading-relaxed mb-6">
+                  熱愛科技教育，透過整合 AI 應用，物聯網與智慧機器人課程，
+                  激發學生探索未來的熱情，在實踐中養成具備數位韌性的創新思考者。
+                </p>
+
+                <div className="grid grid-cols-3 gap-2">
+                  {credentials.map((cred) => (
+                    <div key={cred.label} className="p-3 rounded-lg bg-[#F5F4F1]">
+                      <div className="text-lg font-bold text-[#1a1a1a]">{cred.value}</div>
+                      <div className="text-[10px] text-[#2D5A27]">{cred.label}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </section>
 
@@ -65,10 +68,12 @@ export default function AboutPage() {
               { title: '物聯網', description: '結合硬體與軟體，打造智慧互聯的 IoT 解決方案。' },
               { title: '創意專題', description: '用科技實現想法，完成獨一無二的創意專題作品。' },
             ].map((topic) => (
-              <div key={topic.title} className="card-premium p-5">
-                <h3 className="text-sm font-semibold text-[#1a1a1a] mb-2">{topic.title}</h3>
-                <p className="text-xs text-[#6b7280]">{topic.description}</p>
-              </div>
+              <Card key={topic.title}>
+                <CardContent className="p-5">
+                  <h3 className="text-sm font-semibold text-[#1a1a1a] mb-2">{topic.title}</h3>
+                  <p className="text-xs text-[#6b7280]">{topic.description}</p>
+                </CardContent>
+              </Card>
             ))}
           </div>
         </div>
