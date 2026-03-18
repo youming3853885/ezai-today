@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
-import { Noto_Sans_TC } from "next/font/google";
+import { Noto_Sans_TC, Geist } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import "./globals.css";
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const notoSansTC = Noto_Sans_TC({
   variable: "--font-noto-sans-tc",
@@ -28,7 +31,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh-TW">
+    <html lang="zh-TW" className={cn("font-sans", geist.variable)}>
       <body className={`${notoSansTC.variable} antialiased`}>
         <Navbar />
         {children}

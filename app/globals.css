@@ -1,58 +1,101 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Warm Nature Theme - 教育、成長、陪伴 */
-  --background: #FAF9F6;
   --background-secondary: #F5F4F1;
-  --foreground: #1a1a1a;
   --foreground-muted: #6b7280;
 
-  /* 主色 - 森林深綠 (#2D5A27) */
-  --primary: #2D5A27;
+  /* 主色 - 森林深綠 */
+  --primary: oklch(0.205 0 0);
   --primary-hover: #3d7a35;
   --primary-light: #4a8f43;
   --primary-muted: #A5D6A7;
 
-  /* 輔助色 - 薄荷綠 (#A5D6A7) */
-  --secondary: #A5D6A7;
-  --secondary-hover: #8BC98B;
-
-  /* 點綴色 - 琥珀橘 (#FF8F00) */
-  --accent: #FF8F00;
-  --accent-hover: #FFA726;
+  /* 點綴色 - 琥珀橘 */
+  --accent: oklch(0.97 0 0);
 
   /* Card & Surface */
-  --card: #FFFFFF;
-  --card-hover: #FFFFFF;
+  --card: oklch(1 0 0);
   --card-border: #E5E5E0;
   --card-border-hover: #D4D4CF;
-
-  /* Text hierarchy */
-  --text-primary: #1a1a1a;
-  --text-secondary: #4B5563;
-  --text-tertiary: #9CA3AF;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.809 0.105 251.813);
+  --chart-2: oklch(0.623 0.214 259.815);
+  --chart-3: oklch(0.546 0.245 262.881);
+  --chart-4: oklch(0.488 0.243 264.376);
+  --chart-5: oklch(0.424 0.199 265.638);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
 }
 
 @theme inline {
   --color-background: var(--background);
-  --color-background-secondary: var(--background-secondary);
   --color-foreground: var(--foreground);
   --color-foreground-muted: var(--foreground-muted);
   --color-primary: var(--primary);
   --color-primary-hover: var(--primary-hover);
   --color-primary-light: var(--primary-light);
-  --color-primary-muted: var(--primary-muted);
-  --color-secondary: var(--secondary);
-  --color-secondary-hover: var(--secondary-hover);
   --color-accent: var(--accent);
-  --color-accent-hover: var(--accent-hover);
   --color-card: var(--card);
-  --color-card-hover: var(--card-hover);
   --color-card-border: var(--card-border);
-  --color-card-border-hover: var(--card-border-hover);
-  --color-text-primary: var(--text-primary);
-  --color-text-secondary: var(--text-secondary);
-  --color-text-tertiary: var(--text-tertiary);
+  --font-sans: var(--font-sans);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
 * {
@@ -64,146 +107,44 @@ html {
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-/* ========== 基礎動畫 ========== */
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
+/* 簡單進場動畫 */
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
 }
 
-@keyframes subtleFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out;
 }
 
-@keyframes subtlePulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
-}
-
-/* 動畫類別 */
-.animate-fade-in-up { animation: fadeInUp 0.6s ease-out forwards; }
-.animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
-.animate-float { animation: subtleFloat 4s ease-in-out infinite; }
-.animate-subtle-pulse { animation: subtlePulse 3s ease-in-out infinite; }
-.animate-bounce-subtle { animation: subtleFloat 3s ease-in-out infinite; }
-
-/* 延遲 */
-.delay-100 { animation-delay: 0.1s; }
-.delay-200 { animation-delay: 0.2s; }
-.delay-300 { animation-delay: 0.3s; }
-.delay-400 { animation-delay: 0.4s; }
-.delay-500 { animation-delay: 0.5s; }
-.delay-600 { animation-delay: 0.6s; }
-.delay-700 { animation-delay: 0.7s; }
-.delay-800 { animation-delay: 0.8s; }
-
-/* 初始隱藏 */
-.animate-on-scroll {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-}
-
-.animate-on-scroll.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ========== 卡片效果 ========== */
+/* 卡片效果 */
 .card-premium {
   background: var(--card);
   border: 1px solid var(--card-border);
   border-radius: 16px;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .card-premium:hover {
-  background: var(--card-hover);
   border-color: var(--card-border-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 20px rgba(45, 90, 39, 0.1);
 }
 
-/* 浮動卡片 */
-.card-float {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.card-float:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 30px rgba(45, 90, 39, 0.12);
-}
-
-/* ========== 背景效果 ========== */
-.gradient-premium {
-  background:
-    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(165, 214, 167, 0.2), transparent),
-    radial-gradient(ellipse 60% 40% at 100% 0%, rgba(255, 143, 0, 0.08), transparent),
-    var(--background);
-}
-
-/* 動態背景裝飾 */
-.bg-decorate-1 {
-  position: absolute;
-  width: 500px;
-  height: 500px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(165, 214, 167, 0.3) 0%, transparent 70%);
-  filter: blur(80px);
-  animation: float 8s ease-in-out infinite;
-}
-
-.bg-decorate-2 {
-  position: absolute;
-  width: 400px;
-  height: 400px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 143, 0, 0.15) 0%, transparent 70%);
-  filter: blur(60px);
-  animation: floatRotate 10s ease-in-out infinite;
-}
-
-/* ========== Glass 效果 ========== */
-.glass {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(45, 90, 39, 0.1);
-}
-
-.glass-strong {
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(30px);
-  -webkit-backdrop-filter: blur(30px);
-  border: 1px solid rgba(45, 90, 39, 0.15);
-}
-
-/* ========== 按鈕效果 ========== */
+/* 按鈕效果 */
 .btn-primary {
   background: var(--primary);
   color: white;
   font-weight: 500;
   padding: 14px 32px;
   border-radius: 12px;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .btn-primary:hover {
   background: var(--primary-hover);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 20px rgba(45, 90, 39, 0.2);
 }
 
 .btn-secondary {
@@ -213,26 +154,15 @@ body {
   padding: 14px 32px;
   border-radius: 12px;
   border: 2px solid var(--primary);
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .btn-secondary:hover {
   background: var(--primary);
   color: white;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 20px rgba(45, 90, 39, 0.15);
 }
 
-/* ========== 文字效果 ========== */
-.text-gradient {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 50%, var(--accent) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  background-size: 200% 200%;
-  animation: gradientShift 3s ease infinite;
-}
-
+/* 文字漸變 */
 .text-gradient-subtle {
   background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
   -webkit-background-clip: text;
@@ -240,96 +170,65 @@ body {
   background-clip: text;
 }
 
-/* 標題裝飾線 */
-.title-line {
-  position: relative;
-  display: inline-block;
-}
-
-.title-line::after {
-  content: '';
-  position: absolute;
-  bottom: -8px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60px;
-  height: 3px;
-  background: linear-gradient(90deg, var(--primary), var(--accent));
-  border-radius: 2px;
-}
-
-/* ========== 圖片效果 ========== */
-.img-hover-zoom {
-  overflow: hidden;
-}
-
+/* 圖片放大 */
 .img-hover-zoom img {
-  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.3s ease;
 }
 
 .img-hover-zoom:hover img {
-  transform: scale(1.08);
+  transform: scale(1.05);
 }
 
-/* ========== 連結效果 ========== */
-.link-underline {
-  position: relative;
-}
-
-.link-underline::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: var(--primary);
-  transition: width 0.3s ease;
-}
-
-.link-underline:hover::after {
-  width: 100%;
-}
-
-/* ========== 段落樣式 ========== */
 p {
   line-height: 1.8;
 }
 
-/* ========== 選取文字顏色 ========== */
 ::selection {
-  background: rgba(165, 214, 167, 0.4);
-  color: var(--foreground);
+  background: rgba(45, 90, 39, 0.15);
 }
 
-/* ========== 滾動條 ========== */
-::-webkit-scrollbar {
-  width: 8px;
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.809 0.105 251.813);
+  --chart-2: oklch(0.623 0.214 259.815);
+  --chart-3: oklch(0.546 0.245 262.881);
+  --chart-4: oklch(0.488 0.243 264.376);
+  --chart-5: oklch(0.424 0.199 265.638);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
 }
 
-::-webkit-scrollbar-track {
-  background: var(--background-secondary);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--primary-muted);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--primary-light);
-}
-
-/* ========== 載入動畫 ========== */
-.loader {
-  width: 40px;
-  height: 40px;
-  border: 3px solid var(--card-border);
-  border-top-color: var(--primary);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
 }

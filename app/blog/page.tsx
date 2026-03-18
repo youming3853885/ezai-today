@@ -83,12 +83,9 @@ export default function BlogPage() {
   return (
     <main className="min-h-screen bg-[#FAF9F6]">
       {/* Hero */}
-      <section className="relative pt-32 pb-12 px-6 overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 rounded-full bg-[#2D5A27]/5 blur-[80px]" />
-        <div className="absolute bottom-0 left-0 w-48 h-48 rounded-full bg-[#FF8F00]/5 blur-[60px]" />
-
-        <div className="relative max-w-6xl mx-auto">
-          <h1 className="text-3xl sm:text-4xl font-bold text-[#1a1a1a] animate-fade-in-up">部落格 / 學習資源</h1>
+      <section className="pt-32 pb-8 px-6">
+        <div className="max-w-5xl mx-auto">
+          <h1 className="text-2xl sm:text-3xl font-bold text-[#1a1a1a]">部落格</h1>
         </div>
       </section>
 

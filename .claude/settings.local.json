@@ -9,7 +9,12 @@
       "Bash(ls -la /c/Users/DCT/Desktop/Arduino專案/web/*.png | head -10)",
       "Bash(cp \"/c/Users/DCT/Desktop/Arduino專案/web/卡通娃娃.png\" C:/AI-Cursor/ezai_web/public/cute_man.png && cp \"/c/Users/DCT/Desktop/Arduino專案/web/人物照片.png\" C:/AI-Cursor/ezai_web/public/eddie.png && cp \"/c/Users/DCT/Desktop/Arduino專案/web/背景圖.png\" C:/AI-Cursor/ezai_web/public/background.png)",
       "WebSearch",
-      "Bash(cd C:/AI-Cursor/ezai_web && gh repo create ezai-today --public --source=. --description \"Ezai.today - 智造教育個人品牌官網\")"
+      "Bash(cd C:/AI-Cursor/ezai_web && gh repo create ezai-today --public --source=. --description \"Ezai.today - 智造教育個人品牌官網\")",
+      "Bash(cd C:/AI-Cursor/ezai_web && npx shadcn@latest init -y)",
+      "Bash(cd C:/AI-Cursor/ezai_web && echo \"radix\" | npx shadcn@latest init -y 2>&1 || true)",
+      "Bash(cd C:/AI-Cursor/ezai_web && npx shadcn@latest init --defaults --style new-york --base-color slate --yes 2>&1 | head -30)",
+      "Bash(cd C:/AI-Cursor/ezai_web && npx shadcn@latest init --help 2>&1)",
+      "Bash(cd C:/AI-Cursor/ezai_web && npx shadcn@latest init --defaults --yes 2>&1)"
     ]
   }
 }
