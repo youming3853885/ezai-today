@@ -28,9 +28,9 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? 'bg-white/95 backdrop-blur-xl shadow-lg shadow-[#2D5A27]/5'
+          ? 'bg-white/95 backdrop-blur-sm shadow-sm'
           : 'bg-transparent'
       }`}
     >
@@ -38,45 +38,35 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-20">
           {/* Logo with animation */}
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-[#2D5A27] to-[#4a8f43] flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 shadow-lg shadow-[#2D5A27]/20">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#2D5A27] to-[#4a8f43] flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
               <span className="text-white font-bold text-sm">E</span>
-              <div className="absolute inset-0 rounded-xl bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
-            <span className="text-[#1a1a1a] font-semibold text-sm tracking-wide group-hover:text-[#2D5A27] transition-colors">
+            <span className="text-[#1a1a1a] font-semibold text-sm tracking-wide">
               Ezai.today
             </span>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-2">
-            {navItems.map((item, index) => (
+          <div className="hidden md:flex items-center gap-1">
+            {navItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`relative px-4 py-2.5 text-sm font-medium rounded-xl transition-all duration-300 ${
+                className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
                   pathname === item.href
                     ? 'text-[#2D5A27] bg-[#2D5A27]/10'
-                    : 'text-[#4B5563] hover:text-[#2D5A27] hover:bg-[#2D5A27]/5'
+                    : 'text-[#4B5563] hover:text-[#2D5A27]'
                 }`}
-                style={{ animationDelay: `${index * 0.05}s` }}
               >
                 {item.name}
-                {/* Active indicator */}
-                {pathname === item.href && (
-                  <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-[#2D5A27]" />
-                )}
               </Link>
             ))}
           </div>
 
           {/* CTA Button */}
           <div className="hidden md:block">
-            <Link
-              href="/courses"
-              className="btn-primary text-sm relative overflow-hidden group"
-            >
-              <span className="relative z-10">開始學習</span>
-              <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+            <Link href="/courses" className="btn-primary text-sm">
+              開始學習
             </Link>
           </div>
 
