@@ -1,0 +1,2116 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="陳又鳴 Eddie Chen｜智造教育實驗室創辦人，AI · IoT · 機器人教育專家。10+ 年經驗，200+ 演講，致力培養具備數位韌性的科技創造者。">
+  <title>陳又鳴 Eddie Chen｜智造教育實驗室</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=JetBrains+Mono:wght@400;500;600&family=Noto+Serif+TC:wght@300;400;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============================================
+       DESIGN TOKENS
+       Inspired by: Kyle Cooper × Tadao Ando
+       Canvas = concrete shadow depth
+       Vermillion = the single light shaft
+    ============================================ */
+    :root {
+      /* Surfaces — concrete shadow palette */
+      --canvas:      #090909;
+      --surface-1:   #101010;
+      --surface-2:   #181818;
+      --surface-3:   #202020;
+      --surface-4:   #2C2C2C;
+
+      /* Text hierarchy */
+      --ink-primary:   #EDEAE4;
+      --ink-secondary: #908C86;
+      --ink-muted:     #4A4844;
+      --ink-disabled:  #282624;
+
+      /* Brand — single vermillion light shaft */
+      --vermillion:     #D44030;
+      --vermillion-dim: rgba(212, 64, 48, 0.12);
+      --vermillion-glow: rgba(212, 64, 48, 0.05);
+      --vermillion-border: rgba(212, 64, 48, 0.30);
+
+      /* Borders — whisper-quiet */
+      --border-subtle:   rgba(237, 234, 228, 0.05);
+      --border-default:  rgba(237, 234, 228, 0.09);
+      --border-emphasis: rgba(237, 234, 228, 0.18);
+
+      /* Typography */
+      --font-serif: 'Playfair Display', 'Noto Serif TC', 'Georgia', serif;
+      --font-sans:  'Inter', 'Noto Sans TC', system-ui, -apple-system, sans-serif;
+      --font-mono:  'JetBrains Mono', 'Courier New', monospace;
+
+      /* Spacing scale (4px base) */
+      --sp-1: 4px;   --sp-2: 8px;   --sp-3: 12px;  --sp-4: 16px;
+      --sp-5: 20px;  --sp-6: 24px;  --sp-8: 32px;  --sp-10: 40px;
+      --sp-12: 48px; --sp-16: 64px; --sp-20: 80px; --sp-24: 96px;
+      --sp-32: 128px;
+
+      /* Radius */
+      --r-sm: 2px;
+      --r-md: 4px;
+      --r-lg: 8px;
+
+      /* Motion */
+      --ease-out:  cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in:   cubic-bezier(0.7, 0, 0.84, 0);
+      --dur-fast:  150ms;
+      --dur-base:  240ms;
+      --dur-slow:  500ms;
+    }
+
+    /* ============================================
+       RESET
+    ============================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--canvas);
+      color: var(--ink-primary);
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    img { max-width: 100%; height: auto; display: block; }
+    a { color: inherit; text-decoration: none; }
+    ul, ol { list-style: none; }
+    button { cursor: pointer; border: none; background: none; font: inherit; color: inherit; }
+    :target { scroll-margin-top: 80px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* ============================================
+       UTILITIES
+    ============================================ */
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 var(--sp-8);
+    }
+    @media (max-width: 768px) { .container { padding: 0 var(--sp-5); } }
+
+    .t-label {
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-secondary);
+    }
+    .text-vermillion { color: var(--vermillion); }
+
+    /* ============================================
+       NAVIGATION
+    ============================================ */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid transparent;
+      transition:
+        background var(--dur-base) var(--ease-out),
+        border-color var(--dur-base);
+    }
+    .nav.scrolled {
+      background: rgba(9, 9, 9, 0.90);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-color: var(--border-default);
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 var(--sp-8);
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-3);
+      text-decoration: none;
+    }
+    .nav-logo-mark {
+      width: 30px;
+      height: 30px;
+      background: var(--vermillion);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .nav-wordmark {
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-8);
+    }
+    .nav-link {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--ink-secondary);
+      transition: color var(--dur-fast);
+    }
+    .nav-link:hover { color: var(--ink-primary); }
+    .nav-cta {
+      display: flex;
+      align-items: center;
+      height: 36px;
+      padding: 0 var(--sp-5);
+      border: 1px solid var(--border-emphasis);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      transition: all var(--dur-fast);
+    }
+    .nav-cta:hover {
+      background: var(--ink-primary);
+      color: var(--canvas);
+      border-color: var(--ink-primary);
+    }
+    .nav-menu-btn {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      min-width: 44px;
+      min-height: 44px;
+      color: var(--ink-secondary);
+    }
+    @media (max-width: 768px) {
+      .nav-inner { padding: 0 var(--sp-5); }
+      .nav-links { display: none; }
+      .nav-links.open {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: 64px; left: 0; right: 0; bottom: 0;
+        background: var(--surface-1);
+        padding: var(--sp-10) var(--sp-8);
+        gap: var(--sp-6);
+        align-items: flex-start;
+        border-top: 1px solid var(--border-default);
+        z-index: 199;
+      }
+      .nav-links.open .nav-link { font-size: 1.25rem; color: var(--ink-primary); }
+      .nav-links.open .nav-cta { font-size: 1rem; height: 48px; padding: 0 var(--sp-6); }
+      .nav-menu-btn { display: flex; }
+    }
+
+    /* ============================================
+       BUTTONS
+    ============================================ */
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--sp-2);
+      height: 48px;
+      padding: 0 var(--sp-8);
+      background: var(--vermillion);
+      color: #fff;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      transition: background var(--dur-fast);
+    }
+    .btn-primary:hover { background: #BC3629; }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--sp-2);
+      height: 48px;
+      padding: 0 var(--sp-8);
+      border: 1px solid var(--border-emphasis);
+      color: var(--ink-secondary);
+      font-size: 0.9375rem;
+      font-weight: 500;
+      transition: all var(--dur-fast);
+    }
+    .btn-ghost:hover { border-color: var(--ink-primary); color: var(--ink-primary); }
+
+    .btn-sm {
+      height: 36px;
+      padding: 0 var(--sp-5);
+      font-size: 0.8125rem;
+    }
+
+    /* ============================================
+       SECTION SKELETON
+    ============================================ */
+    .section       { padding: var(--sp-32) 0; }
+    .section-alt   { background: var(--surface-1); }
+
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-3);
+      margin-bottom: var(--sp-5);
+    }
+    .section-label-num {
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      letter-spacing: 0.1em;
+      color: var(--vermillion);
+    }
+    .section-label-text {
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-secondary);
+    }
+    .section-title {
+      font-family: var(--font-serif);
+      font-size: clamp(2rem, 3.5vw, 2.875rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+    }
+    .section-subtitle {
+      font-size: 1.0625rem;
+      color: var(--ink-secondary);
+      line-height: 1.8;
+      max-width: 560px;
+      margin-top: var(--sp-4);
+    }
+
+    /* ============================================
+       REVEAL ANIMATIONS
+    ============================================ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition:
+        opacity var(--dur-slow) var(--ease-out),
+        transform var(--dur-slow) var(--ease-out);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-d1 { transition-delay: 80ms; }
+    .reveal-d2 { transition-delay: 160ms; }
+    .reveal-d3 { transition-delay: 240ms; }
+    .reveal-d4 { transition-delay: 320ms; }
+
+    /* ============================================
+       HERO
+    ============================================ */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      padding-top: 64px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+    }
+
+    /* Ando-inspired geometric grid overlay */
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border-subtle) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border-subtle) 1px, transparent 1px);
+      background-size: 80px 80px;
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    /* Cooper-inspired vertical light shafts */
+    .hero-shaft {
+      position: absolute;
+      top: 0;
+      right: 18%;
+      width: 1px;
+      height: 100%;
+      background: linear-gradient(to bottom, transparent 0%, var(--vermillion) 25%, var(--vermillion) 75%, transparent 100%);
+      opacity: 0.12;
+      pointer-events: none;
+    }
+    .hero-shaft-glow {
+      position: absolute;
+      top: 0;
+      right: calc(18% - 60px);
+      width: 60px;
+      height: 100%;
+      background: linear-gradient(to right, transparent, var(--vermillion-glow), transparent);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 460px;
+      gap: var(--sp-20);
+      align-items: center;
+      width: 100%;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: var(--sp-20) var(--sp-8);
+    }
+
+    .hero-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-4);
+      margin-bottom: var(--sp-8);
+    }
+    .hero-eyebrow-line {
+      width: 36px;
+      height: 1px;
+      background: var(--vermillion);
+      flex-shrink: 0;
+    }
+
+    .hero-name {
+      font-family: var(--font-serif);
+      font-size: clamp(4rem, 10vw, 8.5rem);
+      font-weight: 900;
+      line-height: 0.92;
+      letter-spacing: -0.03em;
+      margin-bottom: var(--sp-6);
+    }
+    .hero-name-en {
+      display: block;
+      font-size: 0.32em;
+      font-weight: 300;
+      font-family: var(--font-sans);
+      letter-spacing: 0.20em;
+      color: var(--ink-secondary);
+      text-transform: uppercase;
+      margin-bottom: var(--sp-3);
+    }
+    .hero-name-accent { color: var(--vermillion); }
+
+    .hero-role {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-3);
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      color: var(--ink-secondary);
+      letter-spacing: 0.05em;
+      margin-bottom: var(--sp-8);
+    }
+    .hero-role-dot {
+      width: 5px;
+      height: 5px;
+      background: var(--vermillion);
+      flex-shrink: 0;
+    }
+
+    .hero-desc {
+      font-size: 1.125rem;
+      color: var(--ink-secondary);
+      line-height: 1.85;
+      max-width: 500px;
+      margin-bottom: var(--sp-12);
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: var(--sp-4);
+      flex-wrap: wrap;
+    }
+
+    /* Hero visual — photo with Ando corner brackets */
+    .hero-visual { position: relative; }
+    .hero-photo-frame {
+      position: relative;
+      aspect-ratio: 4/5;
+    }
+    .hero-photo-frame::before {
+      content: '';
+      position: absolute;
+      top: -10px; right: -10px;
+      width: 72px; height: 72px;
+      border-top: 2px solid var(--vermillion);
+      border-right: 2px solid var(--vermillion);
+      z-index: 2;
+      pointer-events: none;
+    }
+    .hero-photo-frame::after {
+      content: '';
+      position: absolute;
+      bottom: -10px; left: -10px;
+      width: 72px; height: 72px;
+      border-bottom: 2px solid var(--border-emphasis);
+      border-left: 2px solid var(--border-emphasis);
+      z-index: 2;
+      pointer-events: none;
+    }
+    .hero-photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(15%) contrast(1.05);
+    }
+    .hero-photo-fade {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 45%;
+      background: linear-gradient(to top, var(--canvas), transparent);
+    }
+
+    .hero-badge {
+      position: absolute;
+      bottom: var(--sp-8);
+      left: -var(--sp-8);
+      left: -32px;
+      background: var(--surface-2);
+      border: 1px solid var(--border-default);
+      padding: var(--sp-4) var(--sp-5);
+    }
+    .hero-badge-num {
+      font-family: var(--font-mono);
+      font-size: 2.25rem;
+      font-weight: 600;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+    .hero-badge-label {
+      font-size: 0.75rem;
+      color: var(--ink-secondary);
+      margin-top: var(--sp-1);
+    }
+
+    /* Scroll indicator */
+    .hero-scroll {
+      position: absolute;
+      bottom: var(--sp-8);
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--sp-2);
+      z-index: 1;
+    }
+    .hero-scroll-label {
+      font-family: var(--font-mono);
+      font-size: 0.625rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+    .hero-scroll-line {
+      width: 1px;
+      height: 44px;
+      background: linear-gradient(to bottom, var(--border-emphasis), transparent);
+      animation: scroll-pulse 1.8s ease-in-out infinite;
+    }
+    @keyframes scroll-pulse {
+      0%, 100% { opacity: 0.25; }
+      50%       { opacity: 0.8; }
+    }
+
+    @media (max-width: 1100px) {
+      .hero-inner { grid-template-columns: 1fr; }
+      .hero-visual { display: none; }
+    }
+    @media (max-width: 768px) {
+      .hero-inner { padding: var(--sp-12) var(--sp-5); }
+    }
+
+    /* ============================================
+       STATS BAR
+    ============================================ */
+    .stats-bar {
+      border-top: 1px solid var(--border-default);
+      border-bottom: 1px solid var(--border-default);
+      background: var(--surface-1);
+    }
+    .stats-bar-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    .stat-cell {
+      padding: var(--sp-8) var(--sp-8);
+      border-right: 1px solid var(--border-default);
+    }
+    .stat-cell:last-child { border-right: none; }
+    .stat-number {
+      font-family: var(--font-mono);
+      font-size: clamp(2.5rem, 4vw, 3.75rem);
+      font-weight: 600;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+      color: var(--ink-primary);
+    }
+    .stat-number sup { color: var(--vermillion); font-size: 0.5em; vertical-align: super; }
+    .stat-desc {
+      font-size: 0.875rem;
+      color: var(--ink-secondary);
+      margin-top: var(--sp-2);
+    }
+    @media (max-width: 640px) {
+      .stats-bar-grid { grid-template-columns: 1fr; }
+      .stat-cell { border-right: none; border-bottom: 1px solid var(--border-default); }
+      .stat-cell:last-child { border-bottom: none; }
+    }
+
+    /* ============================================
+       SKILLS TICKER
+    ============================================ */
+    .ticker {
+      padding: var(--sp-4) 0;
+      border-bottom: 1px solid var(--border-subtle);
+      overflow: hidden;
+    }
+    .ticker-track {
+      display: flex;
+      gap: var(--sp-10);
+      width: max-content;
+      animation: ticker-scroll 30s linear infinite;
+    }
+    .ticker-track:hover { animation-play-state: paused; }
+    @keyframes ticker-scroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    .ticker-item {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-3);
+      white-space: nowrap;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+      color: var(--ink-muted);
+      text-transform: uppercase;
+    }
+    .ticker-dot {
+      width: 3px; height: 3px;
+      background: var(--vermillion);
+      flex-shrink: 0;
+    }
+
+    /* ============================================
+       ABOUT
+    ============================================ */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--sp-20);
+      align-items: start;
+    }
+
+    .about-desc {
+      font-size: 1.0625rem;
+      color: var(--ink-secondary);
+      line-height: 1.9;
+      margin-top: var(--sp-6);
+    }
+
+    .about-quote {
+      margin-top: var(--sp-8);
+      padding-left: var(--sp-6);
+      border-left: 2px solid var(--vermillion);
+    }
+    .about-quote-text {
+      font-family: var(--font-serif);
+      font-size: 1.25rem;
+      font-style: italic;
+      line-height: 1.65;
+      color: var(--ink-primary);
+    }
+
+    .skill-bars {
+      margin-top: var(--sp-10);
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-5);
+    }
+    .skill-bar-head {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: var(--sp-2);
+    }
+    .skill-bar-name { font-size: 0.875rem; font-weight: 500; }
+    .skill-bar-pct {
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      color: var(--ink-secondary);
+    }
+    .skill-track {
+      height: 2px;
+      background: var(--surface-4);
+    }
+    .skill-fill {
+      height: 100%;
+      background: var(--vermillion);
+      transform-origin: left;
+      transform: scaleX(0);
+      transition: transform 1.1s var(--ease-out);
+    }
+    .skill-fill.run { transform: scaleX(1); }
+
+    /* About photo grid */
+    .about-photos {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto;
+      gap: var(--sp-3);
+    }
+    .about-photo-main { grid-column: 1 / -1; }
+    .about-photo {
+      overflow: hidden;
+    }
+    .about-photo-main { aspect-ratio: 16/9; }
+    .about-photo-sub  { aspect-ratio: 1; }
+    .about-photo img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform var(--dur-slow) var(--ease-out);
+    }
+    .about-photo:hover img { transform: scale(1.04); }
+
+    .expertise-list {
+      margin-top: var(--sp-6);
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-3);
+    }
+    .expertise-item {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--sp-4);
+      padding: var(--sp-5);
+      background: var(--surface-2);
+      border: 1px solid var(--border-subtle);
+      transition: border-color var(--dur-fast);
+    }
+    .expertise-item:hover { border-color: var(--border-emphasis); }
+    .expertise-icon {
+      width: 38px; height: 38px;
+      background: var(--vermillion-dim);
+      border: 1px solid var(--vermillion-border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--vermillion);
+      flex-shrink: 0;
+    }
+    .expertise-icon svg { width: 18px; height: 18px; }
+    .expertise-name {
+      font-weight: 600;
+      font-size: 0.9375rem;
+      margin-bottom: var(--sp-1);
+    }
+    .expertise-desc {
+      font-size: 0.8125rem;
+      color: var(--ink-secondary);
+      line-height: 1.6;
+    }
+
+    @media (max-width: 1024px) { .about-grid { grid-template-columns: 1fr; } }
+
+    /* ============================================
+       COURSES
+    ============================================ */
+    .courses-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--sp-5);
+      margin-top: var(--sp-10);
+    }
+    .course-card {
+      background: var(--surface-1);
+      border: 1px solid var(--border-default);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition:
+        border-color var(--dur-base) var(--ease-out),
+        transform var(--dur-base) var(--ease-out);
+      position: relative;
+    }
+    .course-card:hover {
+      border-color: var(--border-emphasis);
+      transform: translateY(-4px);
+    }
+    .course-card-wide {
+      grid-column: 1 / -1;
+      flex-direction: row;
+    }
+    .course-img { overflow: hidden; }
+    .course-card:not(.course-card-wide) .course-img { aspect-ratio: 16/9; }
+    .course-card-wide .course-img { width: 45%; flex-shrink: 0; }
+    .course-img img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform var(--dur-slow) var(--ease-out);
+    }
+    .course-card:hover .course-img img { transform: scale(1.05); }
+
+    .course-body {
+      padding: var(--sp-6);
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .course-tags {
+      display: flex;
+      gap: var(--sp-2);
+      flex-wrap: wrap;
+      margin-bottom: var(--sp-4);
+    }
+    .course-tag {
+      font-family: var(--font-mono);
+      font-size: 0.625rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: var(--sp-1) var(--sp-2);
+      color: var(--vermillion);
+      background: var(--vermillion-dim);
+      border: 1px solid var(--vermillion-border);
+    }
+    .course-level {
+      font-family: var(--font-mono);
+      font-size: 0.625rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: var(--sp-1) var(--sp-2);
+      color: var(--ink-secondary);
+      background: var(--surface-3);
+      border: 1px solid var(--border-subtle);
+    }
+    .course-title {
+      font-family: var(--font-serif);
+      font-size: 1.25rem;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: var(--sp-3);
+    }
+    .course-desc {
+      font-size: 0.875rem;
+      color: var(--ink-secondary);
+      line-height: 1.75;
+      flex: 1;
+      margin-bottom: var(--sp-5);
+    }
+    .course-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--border-subtle);
+      padding-top: var(--sp-4);
+    }
+    .course-hours {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-2);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--ink-secondary);
+    }
+    .course-hours svg { width: 13px; height: 13px; }
+    .course-status {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-2);
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      color: var(--ink-secondary);
+      letter-spacing: 0.05em;
+    }
+    .status-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+    }
+    .status-dot.soon { background: #E09930; }
+    .status-dot.live { background: #48A060; }
+
+    @media (max-width: 768px) {
+      .courses-grid { grid-template-columns: 1fr; }
+      .course-card-wide { flex-direction: column; }
+      .course-card-wide .course-img { width: 100%; aspect-ratio: 16/9; }
+    }
+
+    /* ============================================
+       BLOG
+    ============================================ */
+    .blog-grid {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      gap: var(--sp-5);
+      margin-top: var(--sp-10);
+    }
+    .blog-featured {
+      background: var(--canvas);
+      border: 1px solid var(--border-default);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: border-color var(--dur-fast);
+      cursor: pointer;
+    }
+    .blog-featured:hover { border-color: var(--border-emphasis); }
+    .blog-featured-img { aspect-ratio: 16/9; overflow: hidden; }
+    .blog-featured-img img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform var(--dur-slow) var(--ease-out);
+    }
+    .blog-featured:hover .blog-featured-img img { transform: scale(1.04); }
+    .blog-featured-body {
+      padding: var(--sp-8);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .post-cat {
+      font-family: var(--font-mono);
+      font-size: 0.625rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--vermillion);
+      margin-bottom: var(--sp-3);
+    }
+    .post-title-lg {
+      font-family: var(--font-serif);
+      font-size: 1.5rem;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: var(--sp-4);
+      transition: color var(--dur-fast);
+    }
+    .blog-featured:hover .post-title-lg { color: var(--vermillion); }
+    .post-excerpt {
+      font-size: 0.9375rem;
+      color: var(--ink-secondary);
+      line-height: 1.75;
+      flex: 1;
+      margin-bottom: var(--sp-6);
+    }
+    .post-meta {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-3);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--ink-muted);
+    }
+    .post-meta-sep { color: var(--border-emphasis); }
+
+    .blog-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-3);
+    }
+    .blog-item {
+      background: var(--canvas);
+      border: 1px solid var(--border-default);
+      padding: var(--sp-5) var(--sp-6);
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-2);
+      transition: border-color var(--dur-fast);
+      cursor: pointer;
+    }
+    .blog-item:hover { border-color: var(--border-emphasis); }
+    .blog-item-cat {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+    .blog-item-title {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      line-height: 1.4;
+      transition: color var(--dur-fast);
+    }
+    .blog-item:hover .blog-item-title { color: var(--vermillion); }
+    .blog-item-date {
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      color: var(--ink-muted);
+    }
+
+    @media (max-width: 900px) { .blog-grid { grid-template-columns: 1fr; } }
+
+    /* ============================================
+       SPEAKING / PORTFOLIO
+    ============================================ */
+    .speaking-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--sp-4);
+      margin-top: var(--sp-10);
+    }
+    .speaking-card {
+      background: var(--surface-1);
+      border: 1px solid var(--border-default);
+      overflow: hidden;
+      transition: border-color var(--dur-base) var(--ease-out);
+      cursor: pointer;
+    }
+    .speaking-card:hover { border-color: var(--border-emphasis); }
+    .speaking-img { aspect-ratio: 4/3; overflow: hidden; }
+    .speaking-img img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      filter: grayscale(35%);
+      transition:
+        transform var(--dur-slow) var(--ease-out),
+        filter var(--dur-slow) var(--ease-out);
+    }
+    .speaking-card:hover .speaking-img img {
+      transform: scale(1.06);
+      filter: grayscale(0%);
+    }
+    .speaking-body { padding: var(--sp-5); }
+    .speaking-event {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--vermillion);
+      margin-bottom: var(--sp-2);
+    }
+    .speaking-title {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      line-height: 1.45;
+      margin-bottom: var(--sp-2);
+    }
+    .speaking-date {
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      color: var(--ink-muted);
+    }
+    @media (max-width: 900px) { .speaking-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 580px) { .speaking-grid { grid-template-columns: 1fr; } }
+
+    /* ============================================
+       TESTIMONIALS
+    ============================================ */
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--sp-5);
+      margin-top: var(--sp-10);
+    }
+    .testimonial-card {
+      background: var(--canvas);
+      border: 1px solid var(--border-default);
+      padding: var(--sp-8);
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-5);
+    }
+    .testimonial-quote-icon { color: var(--vermillion); opacity: 0.45; }
+    .testimonial-quote-icon svg { width: 28px; height: 28px; }
+    .testimonial-text {
+      font-family: var(--font-serif);
+      font-size: 1rem;
+      font-style: italic;
+      line-height: 1.75;
+      color: var(--ink-secondary);
+      flex: 1;
+    }
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-3);
+      border-top: 1px solid var(--border-subtle);
+      padding-top: var(--sp-5);
+    }
+    .testimonial-avatar {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .testimonial-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .testimonial-name { font-size: 0.875rem; font-weight: 600; }
+    .testimonial-role { font-size: 0.8125rem; color: var(--ink-secondary); }
+
+    @media (max-width: 900px) { .testimonials-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 580px) { .testimonials-grid { grid-template-columns: 1fr; } }
+
+    /* ============================================
+       CONTACT / CTA
+    ============================================ */
+    .cta-wrap {
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-ambient {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 60% at 0% 50%, var(--vermillion-glow), transparent),
+        radial-gradient(ellipse 40% 80% at 100% 30%, rgba(212,64,48,0.03), transparent);
+      pointer-events: none;
+    }
+    .cta-inner {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: var(--sp-16);
+      align-items: start;
+    }
+    .cta-headline {
+      font-family: var(--font-serif);
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 900;
+      line-height: 1.0;
+      letter-spacing: -0.025em;
+      margin-bottom: var(--sp-6);
+    }
+    .cta-headline em {
+      font-style: italic;
+      color: var(--vermillion);
+    }
+    .cta-body {
+      font-size: 1.0625rem;
+      color: var(--ink-secondary);
+      line-height: 1.8;
+      margin-bottom: var(--sp-8);
+    }
+    .cta-contacts {
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-4);
+    }
+    .cta-contact-row {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-3);
+      font-size: 0.9375rem;
+      color: var(--ink-secondary);
+    }
+    .cta-contact-icon { color: var(--vermillion); flex-shrink: 0; }
+    .cta-contact-icon svg { width: 16px; height: 16px; }
+
+    .contact-form {
+      background: var(--surface-1);
+      border: 1px solid var(--border-default);
+      padding: var(--sp-8);
+    }
+    .form-title {
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: var(--sp-6);
+    }
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-2);
+      margin-bottom: var(--sp-4);
+    }
+    .form-label {
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--ink-secondary);
+    }
+    .form-input,
+    .form-textarea {
+      background: var(--surface-2);
+      border: 1px solid var(--border-default);
+      color: var(--ink-primary);
+      font-family: var(--font-sans);
+      font-size: 0.9375rem;
+      padding: 10px var(--sp-4);
+      width: 100%;
+      min-height: 44px;
+      outline: none;
+      transition: border-color var(--dur-fast), background var(--dur-fast);
+    }
+    .form-input:focus, .form-textarea:focus {
+      border-color: var(--vermillion);
+      background: var(--surface-3);
+    }
+    .form-input::placeholder, .form-textarea::placeholder { color: var(--ink-muted); }
+    .form-textarea { resize: vertical; min-height: 96px; }
+    .form-submit {
+      width: 100%;
+      height: 48px;
+      background: var(--vermillion);
+      color: #fff;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      border: none;
+      cursor: pointer;
+      margin-top: var(--sp-4);
+      transition: background var(--dur-fast);
+    }
+    .form-submit:hover { background: #BC3629; }
+
+    @media (max-width: 1024px) { .cta-inner { grid-template-columns: 1fr; } }
+
+    /* ============================================
+       FOOTER
+    ============================================ */
+    .footer {
+      background: var(--surface-1);
+      border-top: 1px solid var(--border-default);
+    }
+    .footer-main {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: var(--sp-12);
+      padding: var(--sp-16) 0;
+    }
+    .footer-logo-mark {
+      width: 28px; height: 28px;
+      background: var(--vermillion);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .footer-wordmark {
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+    }
+    .footer-tagline {
+      font-size: 0.875rem;
+      color: var(--ink-secondary);
+      line-height: 1.7;
+      margin-top: var(--sp-4);
+      max-width: 260px;
+    }
+    .footer-social {
+      display: flex;
+      gap: var(--sp-2);
+      margin-top: var(--sp-5);
+    }
+    .social-btn {
+      width: 34px; height: 34px;
+      border: 1px solid var(--border-default);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--ink-secondary);
+      transition: all var(--dur-fast);
+    }
+    .social-btn:hover { border-color: var(--ink-primary); color: var(--ink-primary); }
+    .social-btn svg { width: 15px; height: 15px; }
+
+    .footer-col-head {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-primary);
+      margin-bottom: var(--sp-5);
+    }
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-3);
+    }
+    .footer-link {
+      font-size: 0.875rem;
+      color: var(--ink-secondary);
+      transition: color var(--dur-fast);
+    }
+    .footer-link:hover { color: var(--ink-primary); }
+
+    .footer-bottom {
+      border-top: 1px solid var(--border-subtle);
+      padding: var(--sp-5) 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--sp-4);
+      flex-wrap: wrap;
+    }
+    .footer-copy {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--ink-muted);
+    }
+
+    @media (max-width: 1024px) { .footer-main { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 580px)  { .footer-main { grid-template-columns: 1fr; } }
+  </style>
+</head>
+
+<body>
+
+  <!-- ================================
+       NAVIGATION
+  ================================ -->
+  <nav class="nav" id="nav" aria-label="主導覽">
+    <div class="nav-inner">
+      <a href="#home" class="nav-logo">
+        <div class="nav-logo-mark">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="white" xmlns="http://www.w3.org/2000/svg">
+            <rect x="1" y="1" width="6" height="6"/><rect x="9" y="1" width="6" height="6"/><rect x="5" y="9" width="6" height="6"/>
+          </svg>
+        </div>
+        <span class="nav-wordmark">EDDIE CHEN</span>
+      </a>
+
+      <div class="nav-links" id="navLinks" role="menubar">
+        <a href="#about"    class="nav-link" role="menuitem">關於</a>
+        <a href="#courses"  class="nav-link" role="menuitem">課程</a>
+        <a href="#blog"     class="nav-link" role="menuitem">文章</a>
+        <a href="#speaking" class="nav-link" role="menuitem">演講</a>
+        <a href="#contact"  class="nav-cta"  role="menuitem">聯絡我</a>
+      </div>
+
+      <button class="nav-menu-btn" id="menuBtn" aria-label="開啟選單" aria-expanded="false">
+        <svg id="menuIconOpen" xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" viewBox="0 0 24 24">
+          <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+        <svg id="menuIconClose" xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" viewBox="0 0 24 24" style="display:none">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+
+  <!-- ================================
+       HERO
+  ================================ -->
+  <section class="hero" id="home" aria-label="首頁英雄區塊">
+    <div class="hero-grid" aria-hidden="true"></div>
+    <div class="hero-shaft" aria-hidden="true"></div>
+    <div class="hero-shaft-glow" aria-hidden="true"></div>
+
+    <div class="hero-inner">
+      <div class="hero-text" id="heroText">
+        <div class="hero-eyebrow">
+          <div class="hero-eyebrow-line" aria-hidden="true"></div>
+          <span class="t-label">智造教育實驗室 · 創辦人</span>
+        </div>
+
+        <h1 class="hero-name">
+          <span class="hero-name-en">EDDIE CHEN</span>
+          陳<span class="hero-name-accent">又</span>鳴
+        </h1>
+
+        <div class="hero-role">
+          <div class="hero-role-dot" aria-hidden="true"></div>
+          <span>AI &nbsp;·&nbsp; IoT &nbsp;·&nbsp; Robotics &nbsp;·&nbsp; 智造教育</span>
+        </div>
+
+        <p class="hero-desc">
+          科技是解決問題的工具。透過整合人工智慧、物聯網與智慧機器人，培養具備數位韌性的創新思考者——讓每個學習者從使用者蛻變為創造者。
+        </p>
+
+        <div class="hero-actions">
+          <a href="#courses" class="btn-primary">
+            探索課程
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="#about" class="btn-ghost">了解更多</a>
+        </div>
+      </div>
+
+      <div class="hero-visual" id="heroVisual" aria-hidden="true">
+        <div class="hero-photo-frame">
+          <img class="hero-photo" src="https://picsum.photos/id/1025/600/750" alt="陳又鳴 Eddie Chen — 智造教育實驗室創辦人">
+          <div class="hero-photo-fade"></div>
+          <div class="hero-badge">
+            <div class="hero-badge-num" id="heroBadge">200<span style="color:var(--vermillion)">+</span></div>
+            <div class="hero-badge-label">場演講</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-scroll" aria-hidden="true">
+      <span class="hero-scroll-label">scroll</span>
+      <div class="hero-scroll-line"></div>
+    </div>
+  </section>
+
+
+  <!-- ================================
+       STATS BAR
+  ================================ -->
+  <div class="stats-bar" aria-label="關鍵數據">
+    <div class="stats-bar-grid">
+      <div class="stat-cell reveal">
+        <div class="stat-number"><span id="stat1" class="t-mono">0</span><sup>+</sup></div>
+        <div class="stat-desc">演講場次，涵蓋校園、企業、政府機關</div>
+      </div>
+      <div class="stat-cell reveal reveal-d1">
+        <div class="stat-number"><span id="stat2" class="t-mono">0</span><sup>+</sup></div>
+        <div class="stat-desc">年豐富教學與科技實務經驗</div>
+      </div>
+      <div class="stat-cell reveal reveal-d2">
+        <div class="stat-number"><span id="stat3" class="t-mono">0</span><sup>+</sup></div>
+        <div class="stat-desc">學員受益，持續成長中</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ================================
+       SKILLS TICKER
+  ================================ -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <span class="ticker-item"><span class="ticker-dot"></span>人工智慧 AI</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>物聯網 IoT</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>機器學習 ML</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>智慧機器人</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>Python 程式設計</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>ESP32 開發</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>Arduino</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>教育創新</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>數位韌性</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>創意專題</span>
+      <!-- duplicate for seamless loop -->
+      <span class="ticker-item"><span class="ticker-dot"></span>人工智慧 AI</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>物聯網 IoT</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>機器學習 ML</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>智慧機器人</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>Python 程式設計</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>ESP32 開發</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>Arduino</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>教育創新</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>數位韌性</span>
+      <span class="ticker-item"><span class="ticker-dot"></span>創意專題</span>
+    </div>
+  </div>
+
+
+  <!-- ================================
+       ABOUT
+  ================================ -->
+  <section class="section section-alt" id="about" aria-labelledby="about-title">
+    <div class="container">
+      <div class="about-grid">
+
+        <!-- Text side -->
+        <div>
+          <div class="section-label">
+            <span class="section-label-num">01</span>
+            <span class="section-label-text">關於我</span>
+          </div>
+          <h2 class="section-title reveal" id="about-title">從創造者視角<br>重塑科技教育</h2>
+          <p class="about-desc reveal reveal-d1">
+            我是陳又鳴（Eddie Chen），智造教育實驗室創辦人。擁有超過十年的科技教育實踐經驗，深信每個學習者都有能力成為科技的創造者，而非僅僅是使用者。
+          </p>
+          <p class="about-desc reveal reveal-d2">
+            我的教學整合人工智慧、物聯網（IoT）與智慧機器人三大核心領域，透過實作導向的課程設計，幫助學生在動手做中建立深刻理解，培養解決真實問題的能力。
+          </p>
+          <div class="about-quote reveal reveal-d3">
+            <p class="about-quote-text">"科技是解決問題的工具。讓學習者從使用者蛻變為創造者，才是教育的真正價值。"</p>
+          </div>
+          <div class="skill-bars reveal reveal-d4" id="skillBars">
+            <div class="skill-bar-item">
+              <div class="skill-bar-head">
+                <span class="skill-bar-name">人工智慧 AI</span>
+                <span class="skill-bar-pct">95%</span>
+              </div>
+              <div class="skill-track"><div class="skill-fill" data-w="0.95"></div></div>
+            </div>
+            <div class="skill-bar-item">
+              <div class="skill-bar-head">
+                <span class="skill-bar-name">物聯網 IoT</span>
+                <span class="skill-bar-pct">90%</span>
+              </div>
+              <div class="skill-track"><div class="skill-fill" data-w="0.90"></div></div>
+            </div>
+            <div class="skill-bar-item">
+              <div class="skill-bar-head">
+                <span class="skill-bar-name">智慧機器人</span>
+                <span class="skill-bar-pct">85%</span>
+              </div>
+              <div class="skill-track"><div class="skill-fill" data-w="0.85"></div></div>
+            </div>
+            <div class="skill-bar-item">
+              <div class="skill-bar-head">
+                <span class="skill-bar-name">教育設計</span>
+                <span class="skill-bar-pct">93%</span>
+              </div>
+              <div class="skill-track"><div class="skill-fill" data-w="0.93"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Visual side -->
+        <div>
+          <div class="about-photos reveal">
+            <div class="about-photo about-photo-main">
+              <img src="https://picsum.photos/id/180/800/450" alt="陳又鳴老師課堂教學實況">
+            </div>
+            <div class="about-photo about-photo-sub">
+              <img src="https://picsum.photos/id/160/400/400" alt="IoT 實作場景">
+            </div>
+            <div class="about-photo about-photo-sub">
+              <img src="https://picsum.photos/id/119/400/400" alt="機器人設計場景">
+            </div>
+          </div>
+
+          <div class="expertise-list">
+            <div class="expertise-item reveal reveal-d1">
+              <div class="expertise-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M2 12h4M18 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+              </div>
+              <div>
+                <div class="expertise-name">系統化課程設計</div>
+                <div class="expertise-desc">從基礎到進階循序漸進，每課都有真實專案驗收，建立完整知識體系。</div>
+              </div>
+            </div>
+            <div class="expertise-item reveal reveal-d2">
+              <div class="expertise-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              </div>
+              <div>
+                <div class="expertise-name">企業與校園雙軌</div>
+                <div class="expertise-desc">橫跨教育與產業，為K12至企業研習提供客製化科技教育方案。</div>
+              </div>
+            </div>
+            <div class="expertise-item reveal reveal-d3">
+              <div class="expertise-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              </div>
+              <div>
+                <div class="expertise-name">數位韌性培育</div>
+                <div class="expertise-desc">不只教技術，更培養面對未知挑戰的思考框架與解決問題的心態。</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ================================
+       COURSES
+  ================================ -->
+  <section class="section" id="courses" aria-labelledby="courses-title">
+    <div class="container">
+      <div style="display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:var(--sp-5); margin-bottom:var(--sp-16);">
+        <div>
+          <div class="section-label">
+            <span class="section-label-num">02</span>
+            <span class="section-label-text">線上課程</span>
+          </div>
+          <h2 class="section-title reveal" id="courses-title">系統學習，<br>成為科技創造者</h2>
+        </div>
+        <p class="section-subtitle reveal reveal-d1" style="margin-top:0; max-width:360px;">從零到專案，每門課程都有完整實作路徑。一次購買，永久存取。</p>
+      </div>
+
+      <div class="courses-grid">
+
+        <!-- Featured -->
+        <article class="course-card course-card-wide reveal">
+          <div class="course-img">
+            <img src="https://picsum.photos/id/0/800/600" alt="AI Python 程式設計入門課程封面">
+          </div>
+          <div class="course-body">
+            <div class="course-tags">
+              <span class="course-tag">人工智慧</span>
+              <span class="course-level">初學者</span>
+            </div>
+            <h3 class="course-title">AI Python 程式設計入門</h3>
+            <p class="course-desc">從零開始學習 Python 程式語言，建立扎實基礎後進入 AI 應用領域。涵蓋基礎語法、資料結構、函數設計，到實際的機器學習案例，讓初學者也能快速上手並完成第一個 AI 專案。</p>
+            <div class="course-foot">
+              <span class="course-hours">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                12 小時課程
+              </span>
+              <span class="course-status">
+                <span class="status-dot soon"></span>即將上線
+              </span>
+            </div>
+          </div>
+        </article>
+
+        <article class="course-card reveal reveal-d1">
+          <div class="course-img">
+            <img src="https://picsum.photos/id/96/600/400" alt="物聯網 IoT 實作課程">
+          </div>
+          <div class="course-body">
+            <div class="course-tags">
+              <span class="course-tag">物聯網</span>
+              <span class="course-level">中階</span>
+            </div>
+            <h3 class="course-title">物聯網 IoT 實作課程</h3>
+            <p class="course-desc">使用 ESP32 開發板，從感測器到雲端，打造完整的智慧 IoT 解決方案。</p>
+            <div class="course-foot">
+              <span class="course-hours">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                16 小時課程
+              </span>
+              <span class="course-status">
+                <span class="status-dot soon"></span>即將上線
+              </span>
+            </div>
+          </div>
+        </article>
+
+        <article class="course-card reveal reveal-d2">
+          <div class="course-img">
+            <img src="https://picsum.photos/id/26/600/400" alt="機器學習 ML 實戰課程">
+          </div>
+          <div class="course-body">
+            <div class="course-tags">
+              <span class="course-tag">機器學習</span>
+              <span class="course-level">進階</span>
+            </div>
+            <h3 class="course-title">機器學習 ML 實戰</h3>
+            <p class="course-desc">理論與實作並重，從資料處理到模型部署，打造你的第一個完整 ML 專案。</p>
+            <div class="course-foot">
+              <span class="course-hours">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                20 小時課程
+              </span>
+              <span class="course-status">
+                <span class="status-dot soon"></span>即將上線
+              </span>
+            </div>
+          </div>
+        </article>
+
+        <article class="course-card reveal reveal-d1">
+          <div class="course-img">
+            <img src="https://picsum.photos/id/3/600/400" alt="機器人設計與實作課程">
+          </div>
+          <div class="course-body">
+            <div class="course-tags">
+              <span class="course-tag">機器人</span>
+              <span class="course-level">中階</span>
+            </div>
+            <h3 class="course-title">機器人設計與實作</h3>
+            <p class="course-desc">從機構設計到程式控制，完整掌握機器人技術的核心概念與實際應用。</p>
+            <div class="course-foot">
+              <span class="course-hours">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                18 小時課程
+              </span>
+              <span class="course-status">
+                <span class="status-dot soon"></span>即將上線
+              </span>
+            </div>
+          </div>
+        </article>
+
+      </div>
+
+      <div style="display:flex; justify-content:center; margin-top:var(--sp-12);">
+        <a href="#contact" class="btn-ghost">
+          取得課程開課通知
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ================================
+       BLOG
+  ================================ -->
+  <section class="section section-alt" id="blog" aria-labelledby="blog-title">
+    <div class="container">
+      <div style="display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:var(--sp-5); margin-bottom:var(--sp-10);">
+        <div>
+          <div class="section-label">
+            <span class="section-label-num">03</span>
+            <span class="section-label-text">最新文章</span>
+          </div>
+          <h2 class="section-title reveal" id="blog-title">思考 · 實踐 · 分享</h2>
+        </div>
+        <a href="#" class="btn-ghost btn-sm reveal">所有文章</a>
+      </div>
+
+      <div class="blog-grid">
+        <article class="blog-featured reveal">
+          <div class="blog-featured-img">
+            <img src="https://picsum.photos/id/48/800/450" alt="2025年台灣AI教育現況分析文章封面">
+          </div>
+          <div class="blog-featured-body">
+            <div class="post-cat">AI 教育</div>
+            <h3 class="post-title-lg">2025年台灣AI教育現況：從工具使用到創造者培育的關鍵轉變</h3>
+            <p class="post-excerpt">當 ChatGPT 讓每個人都能使用 AI，教育的意義究竟是什麼？我在過去一年走訪超過五十所學校，觀察到一個不可忽視的趨勢……</p>
+            <div class="post-meta">
+              <span>陳又鳴</span>
+              <span class="post-meta-sep">·</span>
+              <span>2025年3月</span>
+              <span class="post-meta-sep">·</span>
+              <span>8 min read</span>
+            </div>
+          </div>
+        </article>
+
+        <div class="blog-list">
+          <article class="blog-item reveal reveal-d1">
+            <div class="blog-item-cat">物聯網</div>
+            <h4 class="blog-item-title">ESP32 + MQTT：打造你的第一個智慧家庭監控系統</h4>
+            <div class="blog-item-date">2025.02.15</div>
+          </article>
+          <article class="blog-item reveal reveal-d2">
+            <div class="blog-item-cat">教育思考</div>
+            <h4 class="blog-item-title">為什麼「失敗」是智造教育中最重要的課程設計元素？</h4>
+            <div class="blog-item-date">2025.01.28</div>
+          </article>
+          <article class="blog-item reveal reveal-d3">
+            <div class="blog-item-cat">機器學習</div>
+            <h4 class="blog-item-title">五個讓高中生也能理解的機器學習概念（附實作範例）</h4>
+            <div class="blog-item-date">2025.01.10</div>
+          </article>
+          <article class="blog-item reveal reveal-d4">
+            <div class="blog-item-cat">演講心得</div>
+            <h4 class="blog-item-title">100場演講後，我對科技教育推廣的重新思考</h4>
+            <div class="blog-item-date">2024.12.20</div>
+          </article>
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:center; margin-top:var(--sp-10);">
+        <a href="#contact" class="btn-ghost">
+          訂閱電子報
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ================================
+       SPEAKING / PORTFOLIO
+  ================================ -->
+  <section class="section" id="speaking" aria-labelledby="speaking-title">
+    <div class="container">
+      <div class="section-label">
+        <span class="section-label-num">04</span>
+        <span class="section-label-text">演講 · 作品集</span>
+      </div>
+      <h2 class="section-title reveal" id="speaking-title">站上舞台，<br>傳遞知識能量</h2>
+      <p class="section-subtitle reveal reveal-d1">從校園到企業、從政府機關到國際研討會，200+ 場演講經驗，持續推動台灣科技教育前行。</p>
+
+      <div class="speaking-grid">
+        <article class="speaking-card reveal">
+          <div class="speaking-img">
+            <img src="https://picsum.photos/id/1060/600/450" alt="AIoT 教育創新論壇主題演講">
+          </div>
+          <div class="speaking-body">
+            <div class="speaking-event">主題演講</div>
+            <h3 class="speaking-title">AIoT 教育創新論壇：從課堂到產業的實踐路徑</h3>
+            <div class="speaking-date">2025.03 · 台北</div>
+          </div>
+        </article>
+
+        <article class="speaking-card reveal reveal-d1">
+          <div class="speaking-img">
+            <img src="https://picsum.photos/id/1074/600/450" alt="中學教師AI素養工作坊">
+          </div>
+          <div class="speaking-body">
+            <div class="speaking-event">工作坊</div>
+            <h3 class="speaking-title">中學教師 AI 素養工作坊：實作導向的課程設計工具</h3>
+            <div class="speaking-date">2025.02 · 台中</div>
+          </div>
+        </article>
+
+        <article class="speaking-card reveal reveal-d2">
+          <div class="speaking-img">
+            <img src="https://picsum.photos/id/137/600/450" alt="製造業 AIoT 轉型企業培訓">
+          </div>
+          <div class="speaking-body">
+            <div class="speaking-event">企業培訓</div>
+            <h3 class="speaking-title">製造業的 AIoT 轉型：從感測器到智慧決策</h3>
+            <div class="speaking-date">2025.01 · 新竹</div>
+          </div>
+        </article>
+
+        <article class="speaking-card reveal">
+          <div class="speaking-img">
+            <img src="https://picsum.photos/id/20/600/450" alt="數位台灣 K12 AI 教育政府活動">
+          </div>
+          <div class="speaking-body">
+            <div class="speaking-event">政府活動</div>
+            <h3 class="speaking-title">數位台灣：K12 學生的 AI 創造力培育策略</h3>
+            <div class="speaking-date">2024.12 · 台北</div>
+          </div>
+        </article>
+
+        <article class="speaking-card reveal reveal-d1">
+          <div class="speaking-img">
+            <img src="https://picsum.photos/id/42/600/450" alt="智慧教育大學演講">
+          </div>
+          <div class="speaking-body">
+            <div class="speaking-event">大學演講</div>
+            <h3 class="speaking-title">智慧教育的未來圖景：當 AI 遇見創客精神</h3>
+            <div class="speaking-date">2024.11 · 台南</div>
+          </div>
+        </article>
+
+        <article class="speaking-card reveal reveal-d2">
+          <div class="speaking-img">
+            <img src="https://picsum.photos/id/145/600/450" alt="台灣AIoT教育模型國際研討會">
+          </div>
+          <div class="speaking-body">
+            <div class="speaking-event">國際研討會</div>
+            <h3 class="speaking-title">Taiwan's AIoT Education Model: Building Digital Resilience</h3>
+            <div class="speaking-date">2024.10 · 國際場</div>
+          </div>
+        </article>
+      </div>
+
+      <div style="display:flex; justify-content:center; margin-top:var(--sp-12);">
+        <a href="#contact" class="btn-primary">
+          邀請演講
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ================================
+       TESTIMONIALS
+  ================================ -->
+  <section class="section section-alt" aria-labelledby="testimonials-title">
+    <div class="container">
+      <div class="section-label">
+        <span class="section-label-num">05</span>
+        <span class="section-label-text">學員迴響</span>
+      </div>
+      <h2 class="section-title reveal" id="testimonials-title">他們說的話</h2>
+
+      <div class="testimonials-grid">
+        <div class="testimonial-card reveal">
+          <div class="testimonial-quote-icon">
+            <svg viewBox="0 0 32 32" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M10 8C6.686 8 4 10.686 4 14v10h10V14H7c0-1.654 1.346-3 3-3h1V8h-1zm14 0c-3.314 0-6 2.686-6 6v10h10V14h-7c0-1.654 1.346-3 3-3h1V8h-1z"/></svg>
+          </div>
+          <p class="testimonial-text">上完陳老師的 IoT 課，我從「能看懂程式碼」進步到「能設計自己的感測系統」。他的教學方式讓複雜概念變得直觀易懂，每個專案都讓我有滿滿成就感。</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">
+              <img src="https://picsum.photos/id/64/100/100" alt="林老師頭像">
+            </div>
+            <div>
+              <div class="testimonial-name">林○○</div>
+              <div class="testimonial-role">高中資訊科教師</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card reveal reveal-d1">
+          <div class="testimonial-quote-icon">
+            <svg viewBox="0 0 32 32" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M10 8C6.686 8 4 10.686 4 14v10h10V14H7c0-1.654 1.346-3 3-3h1V8h-1zm14 0c-3.314 0-6 2.686-6 6v10h10V14h-7c0-1.654 1.346-3 3-3h1V8h-1z"/></svg>
+          </div>
+          <p class="testimonial-text">Eddie 的演講是我聽過最接地氣的 AI 教育分享。不只有理論，更有真實課堂案例和失敗經驗，對我規劃校內 AI 課程幫助極大。</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">
+              <img src="https://picsum.photos/id/91/100/100" alt="張主任頭像">
+            </div>
+            <div>
+              <div class="testimonial-name">張○○</div>
+              <div class="testimonial-role">國中科技領域主任</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card reveal reveal-d2">
+          <div class="testimonial-quote-icon">
+            <svg viewBox="0 0 32 32" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M10 8C6.686 8 4 10.686 4 14v10h10V14H7c0-1.654 1.346-3 3-3h1V8h-1zm14 0c-3.314 0-6 2.686-6 6v10h10V14h-7c0-1.654 1.346-3 3-3h1V8h-1z"/></svg>
+          </div>
+          <p class="testimonial-text">企業內訓後，我們團隊對 AIoT 的理解從概念提升到落地應用。陳老師能把技術語言轉譯成商業場景，這種跨域能力非常難得。</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">
+              <img src="https://picsum.photos/id/65/100/100" alt="王主管頭像">
+            </div>
+            <div>
+              <div class="testimonial-name">王○○</div>
+              <div class="testimonial-role">製造業數位轉型主管</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ================================
+       CONTACT / CTA
+  ================================ -->
+  <section class="section cta-wrap" id="contact" aria-labelledby="contact-title">
+    <div class="cta-ambient" aria-hidden="true"></div>
+    <div class="container">
+      <div class="cta-inner">
+        <div>
+          <div class="section-label">
+            <span class="section-label-num">06</span>
+            <span class="section-label-text">聯絡合作</span>
+          </div>
+          <h2 class="cta-headline reveal" id="contact-title">
+            一起推動<br><em>台灣科技教育</em>
+          </h2>
+          <p class="cta-body reveal reveal-d1">
+            無論是演講邀約、企業培訓、課程合作，或只是想交流科技教育的想法——歡迎與我聯繫。
+          </p>
+          <div class="cta-contacts reveal reveal-d2">
+            <div class="cta-contact-row">
+              <span class="cta-contact-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              </span>
+              <span>hello@ezai.today</span>
+            </div>
+            <div class="cta-contact-row">
+              <span class="cta-contact-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              </span>
+              <span>台灣 · 全台服務</span>
+            </div>
+            <div class="cta-contact-row">
+              <span class="cta-contact-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              </span>
+              <a href="https://ezai.today" style="color:inherit; text-decoration:underline; text-decoration-color:var(--border-emphasis);">ezai.today</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-form reveal reveal-d2">
+          <div class="form-title">發送訊息</div>
+          <div class="form-field">
+            <label class="form-label" for="f-name">姓名</label>
+            <input class="form-input" type="text" id="f-name" name="name" placeholder="您的姓名" autocomplete="name">
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="f-email">Email</label>
+            <input class="form-input" type="email" id="f-email" name="email" placeholder="your@email.com" autocomplete="email">
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="f-subject">主旨</label>
+            <input class="form-input" type="text" id="f-subject" name="subject" placeholder="演講邀約 / 課程合作 / 其他">
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="f-message">訊息內容</label>
+            <textarea class="form-textarea" id="f-message" name="message" placeholder="請簡述您的合作構想或問題……"></textarea>
+          </div>
+          <button class="form-submit" id="formSubmit" type="button">送出訊息</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ================================
+       FOOTER
+  ================================ -->
+  <footer class="footer" aria-label="頁尾">
+    <div class="container">
+      <div class="footer-main">
+
+        <div>
+          <div style="display:flex; align-items:center; gap:var(--sp-3);">
+            <div class="footer-logo-mark">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="white" xmlns="http://www.w3.org/2000/svg">
+                <rect x="1" y="1" width="6" height="6"/><rect x="9" y="1" width="6" height="6"/><rect x="5" y="9" width="6" height="6"/>
+              </svg>
+            </div>
+            <span class="footer-wordmark">EDDIE CHEN</span>
+          </div>
+          <p class="footer-tagline">智造教育實驗室 — 讓每個學習者從使用者蛻變為科技創造者。</p>
+          <div class="footer-social">
+            <a href="#" class="social-btn" aria-label="YouTube">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
+            </a>
+            <a href="#" class="social-btn" aria-label="LinkedIn">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+            <a href="#" class="social-btn" aria-label="Facebook">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
+            <a href="#" class="social-btn" aria-label="Instagram">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <div class="footer-col-head">快速連結</div>
+          <div class="footer-links">
+            <a href="#about"    class="footer-link">關於我</a>
+            <a href="#courses"  class="footer-link">線上課程</a>
+            <a href="#blog"     class="footer-link">最新文章</a>
+            <a href="#speaking" class="footer-link">演講作品</a>
+            <a href="#contact"  class="footer-link">聯絡合作</a>
+          </div>
+        </div>
+
+        <div>
+          <div class="footer-col-head">課程分類</div>
+          <div class="footer-links">
+            <a href="#courses" class="footer-link">AI 人工智慧</a>
+            <a href="#courses" class="footer-link">物聯網 IoT</a>
+            <a href="#courses" class="footer-link">機器學習 ML</a>
+            <a href="#courses" class="footer-link">智慧機器人</a>
+            <a href="#courses" class="footer-link">Python 程式設計</a>
+          </div>
+        </div>
+
+        <div>
+          <div class="footer-col-head">服務項目</div>
+          <div class="footer-links">
+            <a href="#contact" class="footer-link">演講邀約</a>
+            <a href="#contact" class="footer-link">企業培訓</a>
+            <a href="#contact" class="footer-link">學校研習</a>
+            <a href="#contact" class="footer-link">課程合作</a>
+            <a href="#contact" class="footer-link">顧問諮詢</a>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <span class="footer-copy">© 2025 Eddie Chen · 智造教育實驗室 · ezai.today</span>
+        <span class="footer-copy">以熱情與程式碼構建</span>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ================================
+       SCRIPTS
+  ================================ -->
+  <script>
+    // ----- Nav scroll class -----
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 16);
+    }, { passive: true });
+
+    // ----- Mobile menu -----
+    const menuBtn   = document.getElementById('menuBtn');
+    const navLinks  = document.getElementById('navLinks');
+    const iconOpen  = document.getElementById('menuIconOpen');
+    const iconClose = document.getElementById('menuIconClose');
+
+    function toggleMenu(force) {
+      const open = (force !== undefined) ? force : !navLinks.classList.contains('open');
+      navLinks.classList.toggle('open', open);
+      menuBtn.setAttribute('aria-expanded', open);
+      iconOpen.style.display  = open ? 'none'  : '';
+      iconClose.style.display = open ? ''      : 'none';
+    }
+
+    menuBtn.addEventListener('click', () => toggleMenu());
+    navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => toggleMenu(false)));
+
+    // ----- Intersection Observer — reveal -----
+    const revealObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          revealObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+    // ----- Counter animation -----
+    function countUp(el, target, duration) {
+      let start;
+      const step = (ts) => {
+        if (!start) start = ts;
+        const p = Math.min((ts - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.round(eased * target);
+        if (p < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    }
+
+    let statsRan = false;
+    const statsObs = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && !statsRan) {
+        statsRan = true;
+        countUp(document.getElementById('stat1'), 200,  1400);
+        countUp(document.getElementById('stat2'), 10,   800);
+        countUp(document.getElementById('stat3'), 1000, 1600);
+      }
+    }, { threshold: 0.4 });
+    statsObs.observe(document.querySelector('.stats-bar'));
+
+    // ----- Skill bars -----
+    const barsObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.querySelectorAll('.skill-fill').forEach(fill => {
+            const w = parseFloat(fill.dataset.w);
+            fill.style.transform = `scaleX(${w})`;
+            fill.classList.add('run');
+          });
+          barsObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.3 });
+
+    const skillBars = document.getElementById('skillBars');
+    if (skillBars) barsObs.observe(skillBars);
+
+    // ----- Hero entrance animation -----
+    const heroText   = document.getElementById('heroText');
+    const heroVisual = document.getElementById('heroVisual');
+
+    function fadeIn(el, delay, duration) {
+      if (!el) return;
+      el.style.cssText = `opacity:0; transform:translateY(28px); transition:opacity ${duration}ms cubic-bezier(0.16,1,0.3,1) ${delay}ms, transform ${duration}ms cubic-bezier(0.16,1,0.3,1) ${delay}ms`;
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        el.style.opacity   = '1';
+        el.style.transform = 'translateY(0)';
+      }));
+    }
+
+    window.addEventListener('load', () => {
+      fadeIn(heroText,   80,  900);
+      fadeIn(heroVisual, 220, 900);
+    });
+
+    // ----- Form submit mock -----
+    document.getElementById('formSubmit').addEventListener('click', function () {
+      const name    = document.getElementById('f-name').value.trim();
+      const email   = document.getElementById('f-email').value.trim();
+      if (!name || !email) {
+        this.textContent = '請填寫姓名與 Email';
+        this.style.background = '#7A5020';
+        setTimeout(() => {
+          this.textContent    = '送出訊息';
+          this.style.background = '';
+        }, 2500);
+        return;
+      }
+      this.textContent    = '訊息已送出！感謝您的聯繫';
+      this.style.background = '#2A7D4F';
+      this.disabled = true;
+      setTimeout(() => {
+        this.textContent    = '送出訊息';
+        this.style.background = '';
+        this.disabled = false;
+      }, 4000);
+    });
+  </script>
+
+</body>
+</html>
