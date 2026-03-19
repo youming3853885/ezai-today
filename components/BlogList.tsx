@@ -5,6 +5,40 @@ import Link from 'next/link';
 import Image from 'next/image';
 import type { Post } from '@/lib/posts';
 
+/** 縮圖元件：https 用 Next.js Image（優化），data URI 用原生 img（Next.js 不支援）。 */
+function ThumbImg({
+  src,
+  alt,
+  className = 'object-cover',
+  extraClass = '',
+}: {
+  src: string;
+  alt: string;
+  className?: string;
+  extraClass?: string;
+}) {
+  if (src.startsWith('data:')) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={src}
+        alt={alt}
+        loading="lazy"
+        className={`w-full h-full ${className} ${extraClass}`}
+        style={{ objectFit: 'cover' }}
+      />
+    );
+  }
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      fill
+      className={`${className} ${extraClass}`}
+    />
+  );
+}
+
 interface Props {
   posts: Post[];
   categories: string[];
@@ -69,11 +103,10 @@ export default function BlogList({ posts, categories }: Props) {
               >
                 <article className="card-premium overflow-hidden">
                   <div className="relative aspect-video">
-                    <Image
-                      src={featuredPost.image}
+                    <ThumbImg
+                      src={featuredPost.thumbSrc}
                       alt={featuredPost.title}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      extraClass="group-hover:scale-105 transition-transform duration-500"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
                   </div>
@@ -108,11 +141,10 @@ export default function BlogList({ posts, categories }: Props) {
                   >
                     <article className="card-premium overflow-hidden h-full flex flex-col">
                       <div className="relative aspect-video">
-                        <Image
-                          src={post.image}
+                        <ThumbImg
+                          src={post.thumbSrc}
                           alt={post.title}
-                          fill
-                          className="object-cover group-hover:scale-105 transition-transform duration-500"
+                          extraClass="group-hover:scale-105 transition-transform duration-500"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
                       </div>
@@ -232,12 +264,7 @@ export default function BlogList({ posts, categories }: Props) {
                       className="flex gap-3 group"
                     >
                       <div className="relative w-16 h-12 rounded-lg overflow-hidden flex-shrink-0">
-                        <Image
-                          src={post.image}
-                          alt={post.title}
-                          fill
-                          className="object-cover"
-                        />
+                        <ThumbImg src={post.thumbSrc} alt={post.title} />
                       </div>
                       <div className="flex-1 min-w-0">
                         <h4 className="text-sm text-[#1a1a1a] group-hover:text-[#2D5A27] transition-colors line-clamp-2">

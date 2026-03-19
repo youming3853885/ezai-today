@@ -13,11 +13,13 @@ export interface Post {
   description: string;
   content: string;
   contentHtml?: string;
-  /** 第一張圖（可能是 data URI），僅用於文章頁 hero，不用於縮圖 */
+  /** 第一張圖（可能是 data URI），僅用於文章頁 hero */
   heroImage?: string;
   readTime: string;
-  /** 外部 https:// 圖片 URL，用於列表縮圖 / og:image */
+  /** https:// 圖片 URL，供 og:image / 外部分享使用 */
   image: string;
+  /** 列表縮圖：內文第一張圖（https 或 data URI），無圖才用藍色預設 */
+  thumbSrc: string;
   featured?: boolean;
 }
 
@@ -28,9 +30,7 @@ function calcReadTime(content: string): string {
   return `${Math.max(1, Math.round(words / 200))} 分鐘`;
 }
 
-/**
- * 從 Markdown 原始內容中找第一個 https:// 圖片 URL（用於列表縮圖）。
- */
+/** 從原始 Markdown 找第一個 https:// 圖（og:image 用）。 */
 function extractFirstHttpsImage(content: string): string | null {
   const mdMatch = content.match(/!\[[^\]]*\]\((https?:\/\/[^\s)]+)\)/);
   if (mdMatch) return mdMatch[1];
@@ -40,9 +40,22 @@ function extractFirstHttpsImage(content: string): string | null {
 }
 
 /**
- * 從已渲染的 HTML 中找第一個 <img> src（包含 data URI），
- * 用於文章頁 hero 大圖。
+ * 從原始 Markdown 找第一個圖（https 優先，其次 data URI）。
+ * data URI 限 ≤ 300,000 字元（≈225 KB）以避免頁面過大。
+ * 供列表縮圖（thumbSrc）使用。
  */
+function extractFirstImageForThumb(content: string): string | null {
+  const https = extractFirstHttpsImage(content);
+  if (https) return https;
+
+  // data URI — 限大小，防止截圖導致頁面膨脹
+  const dataMatch = content.match(/!\[[^\]]*\]\((data:image\/[^\s)]+)\)/);
+  if (dataMatch && dataMatch[1].length <= 300000) return dataMatch[1];
+
+  return null;
+}
+
+/** 從已渲染 HTML 找第一個 <img> src（含 data URI），供 hero 大圖使用。 */
 function extractFirstImageFromHtml(html: string): string | null {
   const match = html.match(/<img[^>]+src=["']([^"']+)["']/i);
   return match ? match[1] : null;
@@ -66,8 +79,10 @@ export function getAllPosts(): Post[] {
       description: String(data.description ?? ''),
       content,
       readTime: data.readTime ? String(data.readTime) : calcReadTime(content),
-      // 縮圖優先：內文 https 圖 → front matter → 預設藍色圖
+      // og:image：https 優先 → front matter → 預設
       image: extractFirstHttpsImage(content) ?? (data.image ? String(data.image) : DEFAULT_IMAGE),
+      // 縮圖：內文第一張圖（https 或 data URI）→ 無圖才用藍色預設
+      thumbSrc: extractFirstImageForThumb(content) ?? DEFAULT_IMAGE,
       featured: Boolean(data.featured),
     };
   });
@@ -99,6 +114,7 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
     heroImage,
     readTime: data.readTime ? String(data.readTime) : calcReadTime(content),
     image: thumbImage,
+    thumbSrc: extractFirstImageForThumb(content) ?? DEFAULT_IMAGE,
     featured: Boolean(data.featured),
   };
 }
