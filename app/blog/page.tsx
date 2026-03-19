@@ -60,9 +60,28 @@ const blogPosts = [
     readTime: '4 分鐘',
     image: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&q=80',
   },
+  {
+    slug: 'claude-code-intro',
+    title: 'Claude Code 實戰：用 AI 加速開發工作流',
+    excerpt: '深入介紹 Anthropic 的 Claude Code 如何改變開發者日常工作流，從程式撰寫、除錯到架構設計，AI 助手能做到哪些事？',
+    category: 'Claude Code',
+    date: '2025-03-10',
+    readTime: '6 分鐘',
+    image: 'https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&q=80',
+    featured: false,
+  },
+  {
+    slug: 'claude-code-prompting',
+    title: 'Claude Code Prompt 技巧：讓 AI 寫出更好的程式碼',
+    excerpt: '分享我在使用 Claude Code 開發課程平台時累積的 prompt 撰寫心法，幫助你獲得更精準、可維護的程式碼輸出。',
+    category: 'Claude Code',
+    date: '2025-02-20',
+    readTime: '8 分鐘',
+    image: 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=800&q=80',
+  },
 ];
 
-const categories = ['全部', '人工智慧', '物聯網', '程式設計', '機器人', '教育觀點'];
+const categories = ['全部', '人工智慧', '物聯網', '程式設計', '機器人', '教育觀點', 'Claude Code'];
 
 export default function BlogPage() {
   const [searchQuery, setSearchQuery] = useState('');
