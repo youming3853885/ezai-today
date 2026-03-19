@@ -35,12 +35,12 @@ const courses = [
   { tag: '機器人', level: '中階', title: '機器人設計與實作', desc: '從機構設計到程式控制，完整掌握機器人技術的核心概念與實際應用。', hours: '18', img: 'https://picsum.photos/id/3/600/400' },
 ];
 
-/* ─── Blog posts data ─── */
-const posts = [
-  { cat: '物聯網', title: 'ESP32 + MQTT：打造你的第一個智慧家庭監控系統', date: '2025.02.15' },
-  { cat: '教育思考', title: '為什麼「失敗」是智造教育中最重要的課程設計元素？', date: '2025.01.28' },
-  { cat: '機器學習', title: '五個讓高中生也能理解的機器學習概念（附實作範例）', date: '2025.01.10' },
-  { cat: '演講心得', title: '100場演講後，我對科技教育推廣的重新思考', date: '2024.12.20' },
+/* ─── Blog posts data（靜態備用資料） ─── */
+const STATIC_POSTS = [
+  { slug: '', cat: '物聯網', title: 'ESP32 + MQTT：打造你的第一個智慧家庭監控系統', date: '2025.02.15' },
+  { slug: '', cat: '教育思考', title: '為什麼「失敗」是智造教育中最重要的課程設計元素？', date: '2025.01.28' },
+  { slug: '', cat: '機器學習', title: '五個讓高中生也能理解的機器學習概念（附實作範例）', date: '2025.01.10' },
+  { slug: '', cat: '演講心得', title: '100場演講後，我對科技教育推廣的重新思考', date: '2024.12.20' },
 ];
 
 /* ─── Speaking events data ─── */
@@ -63,8 +63,33 @@ const testimonials = [
 /* ─── Ticker skills ─── */
 const skills = ['人工智慧 AI', '物聯網 IoT', '機器學習 ML', '智慧機器人', 'Python 程式設計', 'ESP32 開發', 'Arduino', '教育創新', '數位韌性', '創意專題'];
 
+interface DynamicPost { slug: string; cat: string; title: string; date: string; }
+
 export default function Home() {
   const [formState, setFormState] = useState<'idle' | 'success' | 'error'>('idle');
+  const [posts, setPosts] = useState<DynamicPost[]>(STATIC_POSTS);
+  const [featuredPost, setFeaturedPost] = useState<{ slug: string; title: string; description: string; category: string; date: string; image: string; readTime: string } | null>(null);
+
+  useEffect(() => {
+    // 動態載入最新文章
+    fetch('/api/recent-posts?limit=5')
+      .then((r) => r.json())
+      .then((data: Array<{ slug: string; title: string; date: string; category: string; description: string; readTime: string; image: string }>) => {
+        if (!Array.isArray(data) || data.length === 0) return;
+        const [first, ...rest] = data;
+        setFeaturedPost({
+          slug: first.slug,
+          title: first.title,
+          description: first.description,
+          category: first.category,
+          date: first.date,
+          image: first.image,
+          readTime: first.readTime,
+        });
+        setPosts(rest.map((p) => ({ slug: p.slug, cat: p.category, title: p.title, date: p.date })));
+      })
+      .catch(() => { /* 靜態備用資料維持不變 */ });
+  }, []);
 
   useEffect(() => {
     /* ── Reveal on scroll ── */
@@ -567,45 +592,76 @@ export default function Home() {
 
           <div className="grid gap-5" style={{ gridTemplateColumns: '3fr 2fr' } as React.CSSProperties}>
             {/* Featured */}
-            <article
-              className="reveal flex flex-col border transition-colors duration-150 cursor-pointer group"
-              style={{ ...S.canvas, borderColor: 'var(--border-default)' }}
-              onMouseEnter={(e) => (e.currentTarget.style.borderColor = 'var(--border-emphasis)')}
-              onMouseLeave={(e) => (e.currentTarget.style.borderColor = 'var(--border-default)')}
-            >
-              <div className="img-zoom" style={{ aspectRatio: '16/9' }}>
-                <img src="https://picsum.photos/id/48/800/450" alt="2025年台灣AI教育現況分析" />
-              </div>
-              <div className="flex flex-col flex-1 p-8">
-                <div style={{ ...S.mono, fontSize: '0.625rem', letterSpacing: '0.14em', textTransform: 'uppercase' as const, color: 'var(--vermillion)', marginBottom: 12 }}>AI 教育</div>
-                <h3 className="mb-4 group-hover:text-[var(--vermillion)] transition-colors duration-150" style={{ ...S.serif, fontSize: '1.5rem', fontWeight: 700, lineHeight: 1.3 }}>
-                  2025年台灣AI教育現況：從工具使用到創造者培育的關鍵轉變
-                </h3>
-                <p className="flex-1 mb-6" style={{ fontSize: '0.9375rem', color: 'var(--ink-secondary)', lineHeight: 1.75 }}>
-                  當 ChatGPT 讓每個人都能使用 AI，教育的意義究竟是什麼？我在過去一年走訪超過五十所學校，觀察到一個不可忽視的趨勢……
-                </p>
-                <div className="flex items-center gap-3" style={{ ...S.mono, fontSize: '0.75rem', color: 'var(--ink-muted)' }}>
-                  <span>陳又鳴</span><span style={{ color: 'var(--border-emphasis)' }}>·</span>
-                  <span>2025年3月</span><span style={{ color: 'var(--border-emphasis)' }}>·</span>
-                  <span>8 min read</span>
+            {featuredPost ? (
+              <Link href={`/blog/${featuredPost.slug}`} className="reveal flex flex-col border transition-colors duration-150 cursor-pointer group no-underline" style={{ ...S.canvas, borderColor: 'var(--border-default)' }}
+                onMouseEnter={(e) => (e.currentTarget.style.borderColor = 'var(--border-emphasis)')}
+                onMouseLeave={(e) => (e.currentTarget.style.borderColor = 'var(--border-default)')}
+              >
+                <div className="img-zoom" style={{ aspectRatio: '16/9' }}>
+                  <img src={featuredPost.image} alt={featuredPost.title} />
                 </div>
-              </div>
-            </article>
+                <div className="flex flex-col flex-1 p-8">
+                  <div style={{ ...S.mono, fontSize: '0.625rem', letterSpacing: '0.14em', textTransform: 'uppercase' as const, color: 'var(--vermillion)', marginBottom: 12 }}>{featuredPost.category}</div>
+                  <h3 className="mb-4 group-hover:text-[var(--vermillion)] transition-colors duration-150" style={{ ...S.serif, fontSize: '1.5rem', fontWeight: 700, lineHeight: 1.3 }}>
+                    {featuredPost.title}
+                  </h3>
+                  <p className="flex-1 mb-6" style={{ fontSize: '0.9375rem', color: 'var(--ink-secondary)', lineHeight: 1.75 }}>
+                    {featuredPost.description}
+                  </p>
+                  <div className="flex items-center gap-3" style={{ ...S.mono, fontSize: '0.75rem', color: 'var(--ink-muted)' }}>
+                    <span>陳又鳴</span><span style={{ color: 'var(--border-emphasis)' }}>·</span>
+                    <span>{featuredPost.date}</span><span style={{ color: 'var(--border-emphasis)' }}>·</span>
+                    <span>{featuredPost.readTime} read</span>
+                  </div>
+                </div>
+              </Link>
+            ) : (
+              <article
+                className="reveal flex flex-col border transition-colors duration-150"
+                style={{ ...S.canvas, borderColor: 'var(--border-default)' }}
+              >
+                <div className="img-zoom" style={{ aspectRatio: '16/9' }}>
+                  <img src="https://picsum.photos/id/48/800/450" alt="AI 教育" />
+                </div>
+                <div className="flex flex-col flex-1 p-8">
+                  <div style={{ ...S.mono, fontSize: '0.625rem', letterSpacing: '0.14em', textTransform: 'uppercase' as const, color: 'var(--vermillion)', marginBottom: 12 }}>AI 教育</div>
+                  <h3 className="mb-4" style={{ ...S.serif, fontSize: '1.5rem', fontWeight: 700, lineHeight: 1.3 }}>
+                    2025年台灣AI教育現況：從工具使用到創造者培育的關鍵轉變
+                  </h3>
+                  <p className="flex-1 mb-6" style={{ fontSize: '0.9375rem', color: 'var(--ink-secondary)', lineHeight: 1.75 }}>
+                    當 ChatGPT 讓每個人都能使用 AI，教育的意義究竟是什麼？
+                  </p>
+                </div>
+              </article>
+            )}
 
             {/* List */}
             <div className="flex flex-col gap-3">
               {posts.map((p, i) => (
-                <article
-                  key={p.title}
-                  className={`reveal reveal-d${i + 1} flex flex-col gap-2 border p-5 transition-colors duration-150 cursor-pointer group`}
-                  style={{ ...S.canvas, borderColor: 'var(--border-default)' }}
-                  onMouseEnter={(e) => (e.currentTarget.style.borderColor = 'var(--border-emphasis)')}
-                  onMouseLeave={(e) => (e.currentTarget.style.borderColor = 'var(--border-default)')}
-                >
-                  <div style={{ ...S.mono, fontSize: '0.6rem', letterSpacing: '0.12em', textTransform: 'uppercase' as const, color: 'var(--ink-muted)' }}>{p.cat}</div>
-                  <h4 className="group-hover:text-[var(--vermillion)] transition-colors duration-150" style={{ fontSize: '0.9375rem', fontWeight: 600, lineHeight: 1.4 }}>{p.title}</h4>
-                  <div style={{ ...S.mono, fontSize: '0.6875rem', color: 'var(--ink-muted)' }}>{p.date}</div>
-                </article>
+                p.slug ? (
+                  <Link key={p.title} href={`/blog/${p.slug}`}
+                    className={`reveal reveal-d${i + 1} flex flex-col gap-2 border p-5 transition-colors duration-150 cursor-pointer group no-underline`}
+                    style={{ ...S.canvas, borderColor: 'var(--border-default)' }}
+                    onMouseEnter={(e) => (e.currentTarget.style.borderColor = 'var(--border-emphasis)')}
+                    onMouseLeave={(e) => (e.currentTarget.style.borderColor = 'var(--border-default)')}
+                  >
+                    <div style={{ ...S.mono, fontSize: '0.6rem', letterSpacing: '0.12em', textTransform: 'uppercase' as const, color: 'var(--ink-muted)' }}>{p.cat}</div>
+                    <h4 className="group-hover:text-[var(--vermillion)] transition-colors duration-150" style={{ fontSize: '0.9375rem', fontWeight: 600, lineHeight: 1.4 }}>{p.title}</h4>
+                    <div style={{ ...S.mono, fontSize: '0.6875rem', color: 'var(--ink-muted)' }}>{p.date}</div>
+                  </Link>
+                ) : (
+                  <article
+                    key={p.title}
+                    className={`reveal reveal-d${i + 1} flex flex-col gap-2 border p-5 transition-colors duration-150 cursor-pointer group`}
+                    style={{ ...S.canvas, borderColor: 'var(--border-default)' }}
+                    onMouseEnter={(e) => (e.currentTarget.style.borderColor = 'var(--border-emphasis)')}
+                    onMouseLeave={(e) => (e.currentTarget.style.borderColor = 'var(--border-default)')}
+                  >
+                    <div style={{ ...S.mono, fontSize: '0.6rem', letterSpacing: '0.12em', textTransform: 'uppercase' as const, color: 'var(--ink-muted)' }}>{p.cat}</div>
+                    <h4 className="group-hover:text-[var(--vermillion)] transition-colors duration-150" style={{ fontSize: '0.9375rem', fontWeight: 600, lineHeight: 1.4 }}>{p.title}</h4>
+                    <div style={{ ...S.mono, fontSize: '0.6875rem', color: 'var(--ink-muted)' }}>{p.date}</div>
+                  </article>
+                )
               ))}
             </div>
           </div>
