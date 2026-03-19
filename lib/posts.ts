@@ -13,7 +13,10 @@ export interface Post {
   description: string;
   content: string;
   contentHtml?: string;
+  /** 第一張圖（可能是 data URI），僅用於文章頁 hero，不用於縮圖 */
+  heroImage?: string;
   readTime: string;
+  /** 外部 https:// 圖片 URL，用於列表縮圖 / og:image */
   image: string;
   featured?: boolean;
 }
@@ -26,19 +29,23 @@ function calcReadTime(content: string): string {
 }
 
 /**
- * 從 Markdown 內容中提取第一張圖片的 URL。
- * 支援標準 Markdown 語法 ![alt](url) 以及 HTML <img src="url"> 標籤。
+ * 從 Markdown 原始內容中找第一個 https:// 圖片 URL（用於列表縮圖）。
  */
-function extractFirstImage(content: string): string | null {
-  // 標準 Markdown 圖片：![任意文字](https://...)
+function extractFirstHttpsImage(content: string): string | null {
   const mdMatch = content.match(/!\[[^\]]*\]\((https?:\/\/[^\s)]+)\)/);
   if (mdMatch) return mdMatch[1];
-
-  // HTML img 標籤：<img src="https://...">
   const htmlMatch = content.match(/<img[^>]+src=["'](https?:\/\/[^"']+)["']/i);
   if (htmlMatch) return htmlMatch[1];
-
   return null;
+}
+
+/**
+ * 從已渲染的 HTML 中找第一個 <img> src（包含 data URI），
+ * 用於文章頁 hero 大圖。
+ */
+function extractFirstImageFromHtml(html: string): string | null {
+  const match = html.match(/<img[^>]+src=["']([^"']+)["']/i);
+  return match ? match[1] : null;
 }
 
 export function getAllPosts(): Post[] {
@@ -59,9 +66,8 @@ export function getAllPosts(): Post[] {
       description: String(data.description ?? ''),
       content,
       readTime: data.readTime ? String(data.readTime) : calcReadTime(content),
-      image: data.image
-        ? String(data.image)
-        : (extractFirstImage(content) ?? DEFAULT_IMAGE),
+      // 縮圖優先：內文 https 圖 → front matter → 預設藍色圖
+      image: extractFirstHttpsImage(content) ?? (data.image ? String(data.image) : DEFAULT_IMAGE),
       featured: Boolean(data.featured),
     };
   });
@@ -78,6 +84,10 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
 
   const contentHtml = await marked(content, { async: false }) as string;
 
+  // Hero 圖：內文第一張圖（包含 data URI）→ front matter → 縮圖同款
+  const heroImage = extractFirstImageFromHtml(contentHtml) ?? undefined;
+  const thumbImage = extractFirstHttpsImage(content) ?? (data.image ? String(data.image) : DEFAULT_IMAGE);
+
   return {
     slug,
     title: String(data.title ?? '未命名'),
@@ -86,10 +96,9 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
     description: String(data.description ?? ''),
     content,
     contentHtml,
+    heroImage,
     readTime: data.readTime ? String(data.readTime) : calcReadTime(content),
-    image: data.image
-      ? String(data.image)
-      : (extractFirstImage(content) ?? DEFAULT_IMAGE),
+    image: thumbImage,
     featured: Boolean(data.featured),
   };
 }

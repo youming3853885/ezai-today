@@ -24,12 +24,37 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   const post = await getPostBySlug(slug);
   if (!post) notFound();
 
+  // heroImage 優先（可能是 data URI 或 https），fallback 到縮圖 URL
+  const heroSrc = post.heroImage ?? post.image;
+  const isDataUri = heroSrc.startsWith('data:');
+
   return (
     <main className="min-h-screen" style={{ background: '#FAF9F6', color: '#1a1a1a' }}>
       {/* Hero image */}
-      <div className="relative w-full h-64 sm:h-80 md:h-96">
-        <Image src={post.image} alt={post.title} fill className="object-cover" priority />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+      <div className="relative w-full h-64 sm:h-80 md:h-96 overflow-hidden">
+        {isDataUri ? (
+          /* base64 data URI：用一般 <img>，Next.js Image 不接受 */
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={heroSrc}
+            alt={post.title}
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <Image src={heroSrc} alt={post.title} fill className="object-cover" priority />
+        )}
+
+        {/* 頂部漸層：讓固定導覽列文字保持可讀 */}
+        <div
+          className="absolute top-0 left-0 right-0 pointer-events-none"
+          style={{ height: '35%', background: 'linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, transparent 100%)' }}
+        />
+        {/* 底部漸層：讓標題文字清晰 */}
+        <div
+          className="absolute bottom-0 left-0 right-0 pointer-events-none"
+          style={{ height: '65%', background: 'linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.25) 55%, transparent 100%)' }}
+        />
+
         <div className="absolute bottom-0 left-0 right-0 p-6 max-w-3xl mx-auto">
           <span className="inline-block px-3 py-1 rounded-full bg-white/20 backdrop-blur text-white text-xs font-medium mb-3">
             {post.category}
