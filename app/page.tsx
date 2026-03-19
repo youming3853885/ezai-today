@@ -5,8 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import {
   ArrowRight, Bell, Mail, MapPin, Globe, Clock,
-  Cpu, Wifi, Bot, TrendingUp, Sun, Users,
-  ChevronDown,
+  TrendingUp, Sun, Users, Send,
 } from 'lucide-react';
 
 /* ─── Inline SVG quote mark ─── */
