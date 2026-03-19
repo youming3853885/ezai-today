@@ -790,7 +790,7 @@ export default function Home() {
             </p>
             <div className="reveal reveal-d2 flex flex-col gap-4">
               {[
-                { Icon: Mail,    text: 'hello@ezai.today' },
+                { Icon: Mail,    text: 'admin@ezai.today' },
                 { Icon: MapPin,  text: '台灣 · 全台服務' },
                 { Icon: Globe,   text: 'ezai.today', href: 'https://ezai.today' },
               ].map(({ Icon, text, href }) => (

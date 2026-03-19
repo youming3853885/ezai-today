@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+@plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -205,4 +206,171 @@ p { line-height: 1.8; }
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* ============================================
+   BLOG ARTICLE CONTENT
+   完整 Markdown 渲染樣式（相容 huasheng_editor 輸出格式）
+============================================ */
+.blog-content {
+  color: #1a1a1a;
+  font-size: 1.0625rem;
+  line-height: 1.85;
+  max-width: none;
+}
+
+/* 段落 */
+.blog-content p {
+  color: #374151;
+  margin: 1.25rem 0;
+  line-height: 1.9;
+}
+
+/* 標題 */
+.blog-content h1,
+.blog-content h2,
+.blog-content h3,
+.blog-content h4,
+.blog-content h5,
+.blog-content h6 {
+  color: #111827;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-top: 2.25rem;
+  margin-bottom: 0.75rem;
+}
+.blog-content h1 { font-size: 1.875rem; }
+.blog-content h2 { font-size: 1.5rem;   border-bottom: 2px solid #E5E7EB; padding-bottom: 0.4rem; }
+.blog-content h3 { font-size: 1.25rem; }
+.blog-content h4 { font-size: 1.125rem; }
+
+/* 粗體 / 斜體 */
+.blog-content strong { color: #111827; font-weight: 700; }
+.blog-content em     { color: #374151; font-style: italic; }
+
+/* 連結 */
+.blog-content a {
+  color: #2D5A27;
+  text-decoration: underline;
+  text-decoration-color: #2D5A2740;
+  text-underline-offset: 3px;
+  transition: color 150ms;
+}
+.blog-content a:hover { color: #1a3a18; }
+
+/* 無序 / 有序清單 */
+.blog-content ul,
+.blog-content ol {
+  color: #374151;
+  padding-left: 1.75rem;
+  margin: 1.25rem 0;
+}
+.blog-content ul { list-style-type: disc; }
+.blog-content ol { list-style-type: decimal; }
+.blog-content li {
+  margin: 0.4rem 0;
+  line-height: 1.75;
+}
+.blog-content li > ul,
+.blog-content li > ol { margin: 0.3rem 0; }
+
+/* 引用 */
+.blog-content blockquote {
+  border-left: 4px solid #2D5A27;
+  margin: 1.5rem 0;
+  padding: 0.75rem 1.25rem;
+  background: #F0F7EE;
+  color: #4b5563;
+  font-style: italic;
+  border-radius: 0 4px 4px 0;
+}
+.blog-content blockquote p { margin: 0; color: #4b5563; }
+
+/* 行內程式碼 */
+.blog-content code {
+  background: #F3F4F6;
+  color: #D44030;
+  padding: 0.15em 0.45em;
+  border-radius: 4px;
+  font-size: 0.875em;
+  font-family: 'JetBrains Mono', 'Consolas', 'Monaco', monospace;
+  border: 1px solid #E5E7EB;
+}
+
+/* 程式碼區塊 */
+.blog-content pre {
+  background: #1e1e2e;
+  color: #cdd6f4;
+  padding: 1.25rem 1.5rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  font-size: 0.875rem;
+  line-height: 1.65;
+  border: 1px solid #313244;
+}
+.blog-content pre code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  border: none;
+  font-size: inherit;
+  border-radius: 0;
+}
+
+/* 圖片 */
+.blog-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 1.5rem auto;
+  display: block;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+/* 分隔線 */
+.blog-content hr {
+  border: none;
+  border-top: 2px solid #E5E7EB;
+  margin: 2.5rem 0;
+}
+
+/* 表格 */
+.blog-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.9375rem;
+  overflow-x: auto;
+  display: block;
+}
+.blog-content thead tr {
+  background: #F9FAFB;
+  border-bottom: 2px solid #E5E7EB;
+}
+.blog-content th {
+  color: #111827;
+  font-weight: 600;
+  padding: 0.625rem 1rem;
+  text-align: left;
+  border: 1px solid #E5E7EB;
+}
+.blog-content td {
+  color: #374151;
+  padding: 0.5rem 1rem;
+  border: 1px solid #E5E7EB;
+  vertical-align: top;
+}
+.blog-content tbody tr:nth-child(even) { background: #F9FAFB; }
+.blog-content tbody tr:hover { background: #F0F7EE; }
+
+/* Emoji 不縮小 */
+.blog-content .emoji { font-style: normal; }
+
+/* Blog footer link */
+.blog-footer-link {
+  color: #6b7280;
+}
+.blog-footer-link:hover {
+  color: #2D5A27;
 }
