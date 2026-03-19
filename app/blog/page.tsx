@@ -6,9 +6,9 @@ export const metadata = {
   description: '陳又鳴 Eddie Chen 的 AI 教育、物聯網、機器學習與教育思考文章',
 };
 
-export default function BlogPage() {
-  const posts = getAllPosts();
-  const categories = getAllCategories();
+export default async function BlogPage() {
+  const posts = await getAllPosts();
+  const categories = await getAllCategories();
 
   return (
     <main className="min-h-screen bg-[#FAF9F6]">

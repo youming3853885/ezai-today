@@ -3,10 +3,10 @@ import { getAllPosts } from '@/lib/posts';
 
 export const dynamic = 'force-dynamic';
 
-export function GET(request: Request) {
+export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const limit = parseInt(searchParams.get('limit') ?? '5', 10);
-  const posts = getAllPosts().slice(0, limit).map((p) => ({
+  const posts = (await getAllPosts()).slice(0, limit).map((p) => ({
     slug: p.slug,
     title: p.title,
     date: p.date,

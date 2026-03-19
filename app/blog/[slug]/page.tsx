@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { getAllPosts, getPostBySlug } from '@/lib/posts';
 
 export async function generateStaticParams() {
-  const posts = getAllPosts();
+  const posts = await getAllPosts();
   return posts.map((p) => ({ slug: p.slug }));
 }
 
