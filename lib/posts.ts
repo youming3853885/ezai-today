@@ -25,6 +25,22 @@ function calcReadTime(content: string): string {
   return `${Math.max(1, Math.round(words / 200))} 分鐘`;
 }
 
+/**
+ * 從 Markdown 內容中提取第一張圖片的 URL。
+ * 支援標準 Markdown 語法 ![alt](url) 以及 HTML <img src="url"> 標籤。
+ */
+function extractFirstImage(content: string): string | null {
+  // 標準 Markdown 圖片：![任意文字](https://...)
+  const mdMatch = content.match(/!\[[^\]]*\]\((https?:\/\/[^\s)]+)\)/);
+  if (mdMatch) return mdMatch[1];
+
+  // HTML img 標籤：<img src="https://...">
+  const htmlMatch = content.match(/<img[^>]+src=["'](https?:\/\/[^"']+)["']/i);
+  if (htmlMatch) return htmlMatch[1];
+
+  return null;
+}
+
 export function getAllPosts(): Post[] {
   if (!fs.existsSync(postsDir)) return [];
 
@@ -43,7 +59,9 @@ export function getAllPosts(): Post[] {
       description: String(data.description ?? ''),
       content,
       readTime: data.readTime ? String(data.readTime) : calcReadTime(content),
-      image: String(data.image ?? DEFAULT_IMAGE),
+      image: data.image
+        ? String(data.image)
+        : (extractFirstImage(content) ?? DEFAULT_IMAGE),
       featured: Boolean(data.featured),
     };
   });
@@ -69,7 +87,9 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
     content,
     contentHtml,
     readTime: data.readTime ? String(data.readTime) : calcReadTime(content),
-    image: String(data.image ?? DEFAULT_IMAGE),
+    image: data.image
+      ? String(data.image)
+      : (extractFirstImage(content) ?? DEFAULT_IMAGE),
     featured: Boolean(data.featured),
   };
 }

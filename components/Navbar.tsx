@@ -2,18 +2,20 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
 
-const navItems = [
-  { name: '關於',   href: '#about' },
-  { name: '課程',   href: '#courses' },
-  { name: '文章',   href: '#blog' },
-  { name: '演講',   href: '#speaking' },
+const anchorItems = [
+  { name: '關於',   anchor: 'about' },
+  { name: '課程',   anchor: 'courses' },
+  { name: '演講',   anchor: 'speaking' },
 ];
 
 export default function Navbar() {
   const [open, setOpen]       = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
+  const isHome = pathname === '/';
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 16);
@@ -22,6 +24,10 @@ export default function Navbar() {
   }, []);
 
   const close = () => setOpen(false);
+
+  // 在首頁使用錨點捲動；其他頁面跳回首頁再錨點
+  const anchorHref = (anchor: string) => isHome ? `#${anchor}` : `/#${anchor}`;
+  const contactHref = isHome ? '#contact' : '/#contact';
 
   return (
     <nav
@@ -54,10 +60,10 @@ export default function Navbar() {
 
         {/* Desktop links */}
         <div className="hidden md:flex items-center gap-8">
-          {navItems.map((item) => (
+          {anchorItems.map((item) => (
             <a
-              key={item.href}
-              href={item.href}
+              key={item.anchor}
+              href={anchorHref(item.anchor)}
               style={{ fontSize: '0.875rem', fontWeight: 500, color: 'var(--ink-secondary)', transition: 'color 150ms' }}
               onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--ink-primary)')}
               onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--ink-secondary)')}
@@ -65,8 +71,16 @@ export default function Navbar() {
               {item.name}
             </a>
           ))}
+          <Link
+            href="/blog"
+            style={{ fontSize: '0.875rem', fontWeight: 500, color: 'var(--ink-secondary)', transition: 'color 150ms' }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--ink-primary)')}
+            onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--ink-secondary)')}
+          >
+            文章
+          </Link>
           <a
-            href="#contact"
+            href={contactHref}
             className="flex items-center border transition-all duration-150"
             style={{ height: 36, padding: '0 20px', borderColor: 'var(--border-emphasis)', fontSize: '0.8125rem', fontWeight: 600, color: 'var(--ink-primary)' }}
             onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--ink-primary)'; e.currentTarget.style.color = 'var(--canvas)'; }}
@@ -94,18 +108,25 @@ export default function Navbar() {
           className="md:hidden absolute top-16 left-0 right-0 bottom-0 fixed flex flex-col gap-6 px-8 pt-10"
           style={{ background: 'var(--surface-1)', borderTop: '1px solid var(--border-default)', zIndex: 199, minHeight: '100vh' }}
         >
-          {navItems.map((item) => (
+          {anchorItems.map((item) => (
             <a
-              key={item.href}
-              href={item.href}
+              key={item.anchor}
+              href={anchorHref(item.anchor)}
               onClick={close}
               style={{ fontSize: '1.25rem', fontWeight: 500, color: 'var(--ink-primary)' }}
             >
               {item.name}
             </a>
           ))}
+          <Link
+            href="/blog"
+            onClick={close}
+            style={{ fontSize: '1.25rem', fontWeight: 500, color: 'var(--ink-primary)' }}
+          >
+            文章
+          </Link>
           <a
-            href="#contact"
+            href={contactHref}
             onClick={close}
             className="flex items-center border"
             style={{ height: 48, padding: '0 24px', borderColor: 'var(--border-emphasis)', fontSize: '1rem', fontWeight: 600, color: 'var(--ink-primary)', display: 'inline-flex', alignSelf: 'flex-start' }}
